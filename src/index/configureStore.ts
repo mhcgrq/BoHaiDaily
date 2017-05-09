@@ -1,9 +1,8 @@
 import { createStore, applyMiddleware, compose, Middleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import createReducer from './rootReducer';
-import Fetch from '../../../xjs-public/Fetch/Fetch';
-import Saga, { Watcher } from './rootSaga';
-import authWatcher from '../xjs-auth/watcher';
+import Saga from './rootSaga';
+import watcher from '../saga/watcher';
 
 const sagaMiddleware = createSagaMiddleware();
 const middlewares: Middleware[] = [sagaMiddleware];
@@ -14,9 +13,9 @@ const store = createStore(
     compose.apply(null, composeArgs),
 );
 
-export const fetch = new Fetch(store.dispatch);
-
 const saga = new Saga();
 sagaMiddleware.run(saga.rootSaga.bind(saga), store);
+
+saga.injectAsyncSaga.call(saga, watcher);
 
 export default store;
