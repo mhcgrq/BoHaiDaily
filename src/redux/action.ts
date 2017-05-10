@@ -7,9 +7,20 @@ export function getTimeline(page: number) {
     };
 }
 
-export function getFeed(id: string) {
+export function getFeed(href: string) {
     return {
         type: types.REQUEST_FEED,
-        payload: { id },
+        payload: { href },
     };
+}
+
+export function navOpenFeed(title: string, href: string) {
+    return {
+        type: types.NAV_OPEN_FEED,
+        payload: { title, href },
+    };
+}
+
+export function navBack() {
+    return { type: types.NAV_BACK };
 }

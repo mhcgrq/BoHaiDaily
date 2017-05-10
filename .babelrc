@@ -1,3 +1,14 @@
 {
-  "presets": ["react-native", "stage-0"]
+    "presets": ["react-native"],
+    "plugins": [
+        [
+            "module-resolver",
+            {
+                "root": ["./"],
+                "alias": {
+                    "stream": "react-native-stream"
+                }
+            }
+        ]
+    ]
 }

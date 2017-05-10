@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux-immutable';
 import root from '../redux/reducer';
+import nav from '../redux/navReducer';
 let reducersList = {
     root,
+    nav,
 };
 export default function createReducer(asyncReducers) {
     asyncReducers

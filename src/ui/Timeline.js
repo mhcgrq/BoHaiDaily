@@ -3,18 +3,19 @@ import {
 // View,
 FlatList, Text, TouchableHighlight, } from 'react-native';
 import { connect } from 'react-redux';
-import { getTimeline } from '../redux/action';
+import { getTimeline, navOpenFeed } from '../redux/action';
 class TimeLine extends PureComponent {
     constructor() {
         super(...arguments);
         this.renderItem = (info) => {
             const { title, href } = info.item;
-            return (<TouchableHighlight onPress={this.openFeed(title, href)}>
+            return (<TouchableHighlight key={title} onPress={this.openFeed(title, href)}>
                 <Text>{title}</Text>
             </TouchableHighlight>);
         };
         this.openFeed = (title, href) => () => {
             console.log(title, href);
+            this.props.dispatch(navOpenFeed(title, href));
         };
     }
     componentDidMount() {
@@ -25,8 +26,8 @@ class TimeLine extends PureComponent {
     }
 }
 const mapPropsToState = (state) => ({
-    status: state.getIn(['timeline', 'status']),
-    data: state.getIn(['timeline', 'data']),
+    status: state.getIn(['root', 'timeline', 'status']),
+    data: state.getIn(['root', 'timeline', 'data']),
 });
 export default connect(mapPropsToState)(TimeLine);
 //# sourceMappingURL=Timeline.js.map

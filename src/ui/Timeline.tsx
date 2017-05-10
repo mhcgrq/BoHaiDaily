@@ -8,9 +8,10 @@ import {
 import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
 import { Dispatch } from 'redux';
-import { getTimeline } from '../redux/action';
+import { NavigationNavigatorProps } from 'react-navigation';
+import { getTimeline, navOpenFeed } from '../redux/action';
 
-interface Props {
+interface Props extends NavigationNavigatorProps<{}> {
     status: string;
     data: List<Map<string, string>>;
     dispatch: Dispatch<any>;
@@ -31,19 +32,20 @@ class TimeLine extends PureComponent<Props, {}> {
     private renderItem = (info: { item: { title: string; href: string; } }) => {
         const { title, href } = info.item;
         return (
-            <TouchableHighlight onPress={this.openFeed(title, href)}>
+            <TouchableHighlight key={title} onPress={this.openFeed(title, href)}>
                 <Text>{title}</Text>
             </TouchableHighlight>
         );
     }
     private openFeed = (title: string, href: string) => () => {
         console.log(title, href);
+        this.props.dispatch(navOpenFeed(title, href));
     }
 }
 
 const mapPropsToState = (state: any) => ({
-    status: state.getIn(['timeline', 'status']),
-    data: state.getIn(['timeline', 'data']),
+    status: state.getIn(['root', 'timeline', 'status']),
+    data: state.getIn(['root', 'timeline', 'data']),
 });
 
 export default connect(mapPropsToState)(TimeLine);

@@ -5,10 +5,19 @@ export function getTimeline(page) {
         payload: { page },
     };
 }
-export function getFeed(id) {
+export function getFeed(href) {
     return {
         type: types.REQUEST_FEED,
-        payload: { id },
+        payload: { href },
     };
+}
+export function navOpenFeed(title, href) {
+    return {
+        type: types.NAV_OPEN_FEED,
+        payload: { title, href },
+    };
+}
+export function navBack() {
+    return { type: types.NAV_BACK };
 }
 //# sourceMappingURL=action.js.map

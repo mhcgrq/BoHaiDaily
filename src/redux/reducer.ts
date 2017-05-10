@@ -17,7 +17,7 @@ export default function(state = initStore, { type, payload }: { type: string, pa
             const headerArr = $('.content')
                 .find('article header a')
                 .map((_, header) => ({
-                    href: $(header).attr('a'),
+                    href: $(header).attr('href'),
                     title: $(header).text(),
                 }))
                 .get();
@@ -28,22 +28,30 @@ export default function(state = initStore, { type, payload }: { type: string, pa
         case types.RESOLVE_FEED: {
             const res = payload.res;
             const $ = cheerio.load(res);
-            const feedArr = $('.article-content')
+            const feedArr: Array<{ title: string; src: string; }> = [];
+            const imgIndexArr: number[] = [];
+            $('.article-content')
                 .find('p')
-                .map((_, p) => {
-                    let title = '';
-                    let href = '';
-                    const isTitle = $(p).has('.img');
+                .filter((index, p) => {
+                    const pText = $(p).text();
+                    const isTitle = /^【\d+】/.test(pText);
                     if (isTitle) {
-                        title = $(p).text();
-                    } else {
-                        href = $(p).children('img').attr('src');
+                        imgIndexArr.push(index + 1);
                     }
+                    return isTitle || imgIndexArr.indexOf(index) !== -1;
                 })
-                .get();
+                .each((index, p) => {
+                    const pText = $(p).text();
+                    const isTitle = /^【\d+】/.test(pText);
+                    if (isTitle) {
+                        feedArr.push({ title: pText, src: '' });
+                    } else {
+                        feedArr[feedArr.length - 1].src = $(p).children('img').attr('src');
+                    }
+                });
             return state
-                .setIn(['timeline', 'status'], 'RESOLVE')
-                .setIn(['timeline', 'data'], fromJS(feedArr));
+                .setIn(['feed', 'status'], 'RESOLVE')
+                .setIn(['feed', 'data'], fromJS(feedArr));
         }
         case types.REJECT_TIMELINE: {
             return state.setIn(['timeline', 'status'], 'REJECT');
