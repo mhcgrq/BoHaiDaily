@@ -3,7 +3,7 @@ import {
 // View,
 FlatList, Text, TouchableHighlight, } from 'react-native';
 import { connect } from 'react-redux';
-import { getTimeline, navOpenFeed } from '../redux/action';
+import { getTimeline, navOpenFeed } from '../../redux/action';
 class TimeLine extends PureComponent {
     constructor() {
         super(...arguments);

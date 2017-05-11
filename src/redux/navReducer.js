@@ -1,5 +1,5 @@
 import { NavigationActions } from 'react-navigation';
-import { Navigator } from '../ui/App';
+import { Navigator } from '../ui/scene/App';
 import * as types from './actionType';
 const firstAction = Navigator.router.getActionForPathAndParams('TimeLine');
 export const initNavState = Navigator.router.getStateForAction(firstAction);
@@ -7,9 +7,10 @@ export default function nav(state = initNavState, { type, payload }) {
     let nextState;
     switch (type) {
         case types.NAV_BACK:
+        case 'Navigation/BACK':
             nextState = Navigator
                 .router
-                .getStateForAction(NavigationActions.back({ key: 'TimeLine' }), state);
+                .getStateForAction(NavigationActions.back(), state);
             break;
         case types.NAV_OPEN_FEED:
             nextState = Navigator

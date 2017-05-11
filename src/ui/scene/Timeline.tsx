@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
 import { Dispatch } from 'redux';
 import { NavigationNavigatorProps } from 'react-navigation';
-import { getTimeline, navOpenFeed } from '../redux/action';
+import { getTimeline, navOpenFeed } from '../../redux/action';
 
 interface Props extends NavigationNavigatorProps<{}> {
     status: string;

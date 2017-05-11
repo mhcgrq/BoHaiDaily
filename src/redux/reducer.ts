@@ -40,7 +40,7 @@ export default function(state = initStore, { type, payload }: { type: string, pa
                     }
                     return isTitle || imgIndexArr.indexOf(index) !== -1;
                 })
-                .each((index, p) => {
+                .each((_, p) => {
                     const pText = $(p).text();
                     const isTitle = /^【\d+】/.test(pText);
                     if (isTitle) {

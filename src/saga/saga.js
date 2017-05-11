@@ -4,7 +4,7 @@ import get from '../fetch/fetch';
 import * as types from '../redux/actionType';
 export function* getTimeLine({ page = 1 }) {
     try {
-        const res = yield call(get, api.feeds(page + 1));
+        const res = yield call(get, api.feeds(page));
         yield put({
             type: types.RESOLVE_TIMELINE,
             payload: { res },
