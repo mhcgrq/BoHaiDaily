@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
-import { View, FlatList, Text, } from 'react-native';
+import { FlatList, } from 'react-native';
 import { connect } from 'react-redux';
-import Picture from '../component//Picture';
+import FeedCell, { CELL_HEIGHT } from '../component/FeedCell';
 import { getFeed, requestFeedNextPage } from '../../redux/action';
 class Feed extends PureComponent {
     constructor() {
@@ -9,12 +9,13 @@ class Feed extends PureComponent {
         this.state = {
             refreshing: true,
         };
+        this.getItemLayout = (_, index) => ({
+            length: CELL_HEIGHT,
+            offset: CELL_HEIGHT * index,
+            index,
+        });
         this.renderItem = (info) => {
-            const { title, src } = info.item;
-            return (<View key={title} style={{ flex: 1 }}>
-                <Text>{title}</Text>
-                {src.map((s) => (<Picture key={s} src={s} title={title}/>))}
-            </View>);
+            return (<FeedCell {...info.item}/>);
         };
         this.onEndReached = () => {
             if (this.props.data.size < this.props.totalLength) {
@@ -29,7 +30,7 @@ class Feed extends PureComponent {
         this.props.dispatch(getFeed(this.props.navigation.state.params.href));
     }
     render() {
-        return (<FlatList data={this.props.data.toJS()} renderItem={this.renderItem} onViewableItemsChanged={this.onViewableItemsChanged} keyExtractor={(item) => item.title} onEndReached={this.onEndReached} onEndReachedThreshold={0.9}/>);
+        return (<FlatList data={this.props.data.toJS()} renderItem={this.renderItem} getItemLayout={this.getItemLayout} onViewableItemsChanged={this.onViewableItemsChanged} keyExtractor={(item) => item.title} onEndReached={this.onEndReached} onEndReachedThreshold={0.9}/>);
     }
 }
 const mapPropsToState = (state) => ({

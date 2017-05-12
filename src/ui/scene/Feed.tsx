@@ -1,15 +1,13 @@
 import React, { PureComponent } from 'react';
 import {
-    View,
     FlatList,
-    Text,
     ViewToken,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
 import { Dispatch } from 'redux';
 import { NavigationNavigatorProps } from 'react-navigation';
-import Picture from '../component//Picture';
+import FeedCell, { CELL_HEIGHT } from '../component/FeedCell';
 import { getFeed, requestFeedNextPage } from '../../redux/action';
 
 interface Props extends NavigationNavigatorProps<{ title: string; href: string; }> {
@@ -35,6 +33,7 @@ class Feed extends PureComponent<Props, State> {
             <FlatList
                 data={this.props.data.toJS()}
                 renderItem={this.renderItem}
+                getItemLayout={this.getItemLayout}
                 onViewableItemsChanged={this.onViewableItemsChanged}
                 keyExtractor={(item) => item.title}
                 onEndReached={this.onEndReached}
@@ -42,22 +41,13 @@ class Feed extends PureComponent<Props, State> {
             />
         );
     }
+    private getItemLayout = (_, index) => ({
+        length: CELL_HEIGHT,
+        offset: CELL_HEIGHT * index,
+        index,
+    })
     private renderItem = (info: { item: { title: string; src: string[]; } }) => {
-        const { title, src } = info.item;
-        return (
-            <View key={title} style={{ flex: 1 }}>
-                <Text>{title}</Text>
-                {
-                    src.map((s) => (
-                        <Picture
-                            key={s}
-                            src={s}
-                            title={title}
-                        />
-                    ))
-                }
-            </View>
-        );
+        return (<FeedCell {...info.item} />);
     }
     private onEndReached = () => {
         if (this.props.data.size < this.props.totalLength) {
