@@ -1,4 +1,4 @@
-import { put, call } from 'redux-saga/effects';
+import { put, call, throttle } from 'redux-saga/effects';
 import * as api from '../api/api';
 import get from '../fetch/fetch';
 import * as types from '../redux/actionType';
@@ -26,4 +26,12 @@ export function* getFeed({ href }: { href: string }) {
     } catch (err) {
         yield put({ type: types.REJECT_FEED });
     }
+}
+
+function* requestFeedNextPage() {
+    yield put({ type: types.FEED_NEXT_PAGE });
+}
+
+export function* throttleRequestFeedNextPage() {
+    yield throttle(5000, types.FEED_NEXT_PAGE_SAGA, requestFeedNextPage);
 }

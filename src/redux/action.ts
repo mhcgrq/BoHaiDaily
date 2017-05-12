@@ -1,4 +1,5 @@
 import * as types from './actionType';
+import { LoadStatus } from '../ui/component/Picture';
 
 export function getTimeline(page: number) {
     return {
@@ -23,4 +24,15 @@ export function navOpenFeed(title: string, href: string) {
 
 export function navBack() {
     return { type: types.NAV_BACK };
+}
+
+export function requestFeedNextPage() {
+    return { type: types.FEED_NEXT_PAGE_SAGA };
+}
+
+export function swtichImageStatus(imgSrc: string, status: LoadStatus) {
+    return {
+        type: types.SWITCH_IMAGE_STATUS,
+        payload: { imgSrc, status },
+    };
 }

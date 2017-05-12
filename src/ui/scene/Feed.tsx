@@ -10,33 +10,25 @@ import { List, Map } from 'immutable';
 import { Dispatch } from 'redux';
 import { NavigationNavigatorProps } from 'react-navigation';
 import Picture from '../component//Picture';
-import { getFeed } from '../../redux/action';
+import { getFeed, requestFeedNextPage } from '../../redux/action';
 
 interface Props extends NavigationNavigatorProps<{ title: string; href: string; }> {
     status: string;
     data: List<Map<string, string>>;
     dispatch: Dispatch<any>;
+    totalLength: number;
 }
 
 interface State {
-    cellVisibility: Map<string, boolean>;
+    refreshing: boolean;
 }
 
 class Feed extends PureComponent<Props, State> {
     public state = {
-        cellVisibility: Map<string, boolean>(),
+        refreshing: true,
     };
     public componentDidMount() {
         this.props.dispatch(getFeed(this.props.navigation.state.params.href));
-    }
-    public componentWillReceiveProps(nextProps: Props) {
-        let cellVisibility = Map<string, boolean>();
-        nextProps.data
-            .toJS()
-            .forEach((item: { title: string; src: string; }) => {
-                cellVisibility = cellVisibility.set(item.title, false);
-            }),
-        this.setState({ cellVisibility });
     }
     public render() {
         return (
@@ -45,35 +37,42 @@ class Feed extends PureComponent<Props, State> {
                 renderItem={this.renderItem}
                 onViewableItemsChanged={this.onViewableItemsChanged}
                 keyExtractor={(item) => item.title}
+                onEndReached={this.onEndReached}
+                onEndReachedThreshold={0.9}
             />
         );
     }
-    private renderItem = (info: { item: { title: string; src: string; } }) => {
+    private renderItem = (info: { item: { title: string; src: string[]; } }) => {
         const { title, src } = info.item;
-        // console.log('src: ', src);
         return (
             <View key={title} style={{ flex: 1 }}>
                 <Text>{title}</Text>
-                <Picture
-                    src={src}
-                    title={title}
-                    isViewable={this.state.cellVisibility.get(title)}
-                />
+                {
+                    src.map((s) => (
+                        <Picture
+                            key={s}
+                            src={s}
+                            title={title}
+                        />
+                    ))
+                }
             </View>
         );
     }
+    private onEndReached = () => {
+        if (this.props.data.size < this.props.totalLength) {
+            this.props.dispatch(requestFeedNextPage());
+        }
+    }
     private onViewableItemsChanged = (info: {viewableItems: ViewToken[], changed: ViewToken[]}) => {
-        let cellVisibility = this.state.cellVisibility;
-        info.changed.forEach((item) => {
-            cellVisibility = cellVisibility.set(item.key, item.isViewable);
-        });
-        this.setState({ cellVisibility });
+        console.log('info: ', info);
     }
 }
 
 const mapPropsToState = (state: any) => ({
     status: state.getIn(['root', 'feed', 'status']),
-    data: state.getIn(['root', 'feed', 'data']),
+    data: state.getIn(['root', 'feed', 'visibleData']),
+    totalLength: state.getIn(['root', 'feed', 'data']).size,
 });
 
 export default connect(mapPropsToState)(Feed);

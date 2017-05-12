@@ -6,8 +6,11 @@ export default class Saga {
     injectAsyncSaga(watcherList) {
         for (let i = 0, len = watcherList.length; i < len; i++) {
             this.taskList[watcherList[i].type] = {
+                type: watcherList[i].type,
                 currentTask: null,
                 saga: watcherList[i].saga,
+                ms: watcherList[i].ms || 0,
+                isThrottle: watcherList[i].isThrottle || false,
                 takeAll: watcherList[i].takeAll || false,
             };
         }
@@ -16,7 +19,7 @@ export default class Saga {
         while (true) {
             const { type, payload } = yield take('*');
             const taskObj = this.taskList[type];
-            if (taskObj) {
+            if (taskObj && !taskObj.isThrottle) {
                 if (taskObj.takeAll) {
                     yield fork(taskObj.saga, payload, store.dispatch);
                 }

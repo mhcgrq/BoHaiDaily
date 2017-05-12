@@ -20,4 +20,13 @@ export function navOpenFeed(title, href) {
 export function navBack() {
     return { type: types.NAV_BACK };
 }
+export function requestFeedNextPage() {
+    return { type: types.FEED_NEXT_PAGE_SAGA };
+}
+export function swtichImageStatus(imgSrc, status) {
+    return {
+        type: types.SWITCH_IMAGE_STATUS,
+        payload: { imgSrc, status },
+    };
+}
 //# sourceMappingURL=action.js.map

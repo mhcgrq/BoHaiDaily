@@ -9,6 +9,8 @@ export default fromJS({
         status: 'REQUEST',
         title: '',
         data: [],
+        visibleData: [],
+        page: 1,
     },
 });
 //# sourceMappingURL=initStore.js.map

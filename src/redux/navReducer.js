@@ -21,9 +21,6 @@ export default function nav(state = initNavState, { type, payload }) {
             }), state);
             break;
         default:
-            // nextState = Navigator
-            //     .router
-            //     .getStateForAction({ type }, state);
             break;
     }
     return nextState || state;

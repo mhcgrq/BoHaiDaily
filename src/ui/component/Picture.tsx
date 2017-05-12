@@ -8,10 +8,9 @@ import {
 interface Props {
     src: string;
     title: string;
-    isViewable: boolean;
 }
 
-enum LoadStatus {
+export enum LoadStatus {
     LOADING, LOADED, FAILED,
 }
 
@@ -31,7 +30,6 @@ export default class Picture extends PureComponent<Props, State> {
     public static defaultProps = {
         src: '',
         title: '',
-        isViewable: false,
     };
     private static placeholder = require('../../../assets/placeholder.png');
     public state = {
@@ -56,6 +54,7 @@ export default class Picture extends PureComponent<Props, State> {
                     source={{ uri: this.props.src }}
                     defaultSource={Picture.placeholder}
                     style={this.state.size}
+                    resizeMode="contain"
                     onProgress={this.onProgress}
                     onError={this.onError}
                     onLoad={this.onLoad}
@@ -65,33 +64,33 @@ export default class Picture extends PureComponent<Props, State> {
         );
     }
     private onProgress = (event: { nativeEvent: { loaded: number, total: number }}) => {
-        if (this.props.isViewable) {
+        // if (this.props.isViewable) {
             const {loaded, total} = event.nativeEvent;
             this.setState({
                 progress: + (loaded / total).toFixed(2),
             });
-        }
+        // }
     }
     private onError = () => {
         console.log('fail', this.props.title);
-        if (this.props.isViewable) {
-            this.setState({ status: LoadStatus.FAILED });
-        }
+        // if (this.props.isViewable) {
+        this.setState({ status: LoadStatus.FAILED });
+        // }
     }
     private onLoad = () => {
-        if (this.props.isViewable) {
-            Image.getSize(
-                this.props.src,
-                (width: number, height: number) => { this.calcSize(width, height); },
-                () => {},
-            );
-            this.setState({ status: LoadStatus.LOADED });
-        }
+        // if (this.props.isViewable) {
+            // Image.getSize(
+            //     this.props.src,
+            //     (width: number, height: number) => { this.calcSize(width, height); },
+            //     () => {},
+            // );
+            // this.setState({ status: LoadStatus.LOADED });
+        // }
     }
-    private calcSize = (width: number, height: number) => {
-        let size: ImageSize;
-        const aspectRatio = width / height;
-        size = { width: '100%', aspectRatio };
-        this.setState({ size });
-    }
+    // private calcSize = (width: number, height: number) => {
+    //     let size: ImageSize;
+    //     const aspectRatio = width / height;
+    //     size = { width: '100%', aspectRatio };
+    //     this.setState({ size });
+    // }
 }

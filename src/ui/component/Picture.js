@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Image, View, Text, } from 'react-native';
-var LoadStatus;
+export var LoadStatus;
 (function (LoadStatus) {
     LoadStatus[LoadStatus["LOADING"] = 0] = "LOADING";
     LoadStatus[LoadStatus["LOADED"] = 1] = "LOADED";
@@ -15,31 +15,35 @@ export default class Picture extends PureComponent {
             size: { width: '100%', aspectRatio: 1 },
         };
         this.onProgress = (event) => {
-            if (this.props.isViewable) {
-                const { loaded, total } = event.nativeEvent;
-                this.setState({
-                    progress: +(loaded / total).toFixed(2),
-                });
-            }
+            // if (this.props.isViewable) {
+            const { loaded, total } = event.nativeEvent;
+            this.setState({
+                progress: +(loaded / total).toFixed(2),
+            });
+            // }
         };
         this.onError = () => {
             console.log('fail', this.props.title);
-            if (this.props.isViewable) {
-                this.setState({ status: LoadStatus.FAILED });
-            }
+            // if (this.props.isViewable) {
+            this.setState({ status: LoadStatus.FAILED });
+            // }
         };
         this.onLoad = () => {
-            if (this.props.isViewable) {
-                Image.getSize(this.props.src, (width, height) => { this.calcSize(width, height); }, () => { });
-                this.setState({ status: LoadStatus.LOADED });
-            }
+            // if (this.props.isViewable) {
+            // Image.getSize(
+            //     this.props.src,
+            //     (width: number, height: number) => { this.calcSize(width, height); },
+            //     () => {},
+            // );
+            // this.setState({ status: LoadStatus.LOADED });
+            // }
         };
-        this.calcSize = (width, height) => {
-            let size;
-            const aspectRatio = width / height;
-            size = { width: '100%', aspectRatio };
-            this.setState({ size });
-        };
+        // private calcSize = (width: number, height: number) => {
+        //     let size: ImageSize;
+        //     const aspectRatio = width / height;
+        //     size = { width: '100%', aspectRatio };
+        //     this.setState({ size });
+        // }
     }
     componentDidMount() {
         console.log('mount', this.props.title, this.props.src);
@@ -53,7 +57,7 @@ export default class Picture extends PureComponent {
     }
     render() {
         return (<View style={{ flex: 1 }}>
-                <Image source={{ uri: this.props.src }} defaultSource={Picture.placeholder} style={this.state.size} onProgress={this.onProgress} onError={this.onError} onLoad={this.onLoad}/>
+                <Image source={{ uri: this.props.src }} defaultSource={Picture.placeholder} style={this.state.size} resizeMode="contain" onProgress={this.onProgress} onError={this.onError} onLoad={this.onLoad}/>
                 <Text>{this.state.progress}</Text>
             </View>);
     }
@@ -61,7 +65,6 @@ export default class Picture extends PureComponent {
 Picture.defaultProps = {
     src: '',
     title: '',
-    isViewable: false,
 };
 Picture.placeholder = require('../../../assets/placeholder.png');
 //# sourceMappingURL=Picture.js.map

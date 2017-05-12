@@ -3,6 +3,8 @@ import { fromJS } from 'immutable';
 import initStore from './initStore';
 import * as types from './actionType';
 
+const OFFSET = 2;
+
 export default function(state = initStore, { type, payload }: { type: string, payload: any }) {
     switch (type) {
         case types.REQUEST_TIMELINE: {
@@ -28,36 +30,50 @@ export default function(state = initStore, { type, payload }: { type: string, pa
         case types.RESOLVE_FEED: {
             const res = payload.res;
             const $ = cheerio.load(res);
-            const feedArr: Array<{ title: string; src: string; }> = [];
-            const imgIndexArr: number[] = [];
+            const feedArr: Array<{ title: string; src: string[]; }> = [];
             $('.article-content')
                 .find('p')
-                .filter((index, p) => {
-                    const pText = $(p).text();
-                    const isTitle = /^【\d+】/.test(pText);
-                    if (isTitle) {
-                        imgIndexArr.push(index + 1);
-                    }
-                    return isTitle || imgIndexArr.indexOf(index) !== -1;
-                })
                 .each((_, p) => {
                     const pText = $(p).text();
                     const isTitle = /^【\d+】/.test(pText);
                     if (isTitle) {
-                        feedArr.push({ title: pText, src: '' });
-                    } else {
-                        feedArr[feedArr.length - 1].src = $(p).children('img').attr('src');
+                        const feed: { title: string; src: string[]; } = { title: pText, src: [] };
+                        let nextP = $(p).next();
+                        while ($(nextP).children().is('img')) {
+                            const src = $(nextP).children('img').attr('src');
+                            feed.src.push(src);
+                            nextP = nextP.next();
+                        }
+                        feedArr.push(feed);
                     }
                 });
             return state
                 .setIn(['feed', 'status'], 'RESOLVE')
+                .setIn(['feed', 'visibleData'], fromJS(feedArr.slice(0, OFFSET)))
                 .setIn(['feed', 'data'], fromJS(feedArr));
+        }
+        case types.FEED_NEXT_PAGE: {
+            const currentPage = state.getIn(['feed', 'page']);
+            const data = state.getIn(['feed', 'data']);
+            let currentVisibleData = state.getIn(['feed', 'visibleData']);
+            const newData = data.slice(currentPage * OFFSET, (currentPage + 1) * OFFSET);
+            if (newData.size > 0) {
+                currentVisibleData = currentVisibleData.concat(newData);
+                return state
+                    .setIn(['feed', 'page'], currentPage + 1)
+                    .setIn(['feed', 'visibleData'], currentVisibleData);
+            }
+            return state;
         }
         case types.REJECT_TIMELINE: {
             return state.setIn(['timeline', 'status'], 'REJECT');
         }
         case types.REJECT_FEED: {
             return state.setIn(['feed', 'status'], 'REJECT');
+        }
+        case types.NAV_BACK:
+        case 'Navigation/BACK': {
+            return state.set('feed', initStore.get('feed'));
         }
         default: {
             return state;
