@@ -39,7 +39,7 @@ export default function (state = initStore, { type, payload }) {
                     let nextP = $(p).next();
                     while ($(nextP).children().is('img')) {
                         const src = $(nextP).children('img').attr('src');
-                        feed.src.push(src);
+                        feed.src.push({ src, status: 'REQUEST' });
                         nextP = nextP.next();
                     }
                     feedArr.push(feed);
@@ -54,6 +54,13 @@ export default function (state = initStore, { type, payload }) {
             const currentPage = state.getIn(['feed', 'page']);
             const data = state.getIn(['feed', 'data']);
             let currentVisibleData = state.getIn(['feed', 'visibleData']);
+            const isAllResolved = currentVisibleData.every((item) => {
+                return item.get('src')
+                    .every((s) => s.get('status') === 'RESOLVE');
+            });
+            if (!isAllResolved) {
+                return state;
+            }
             const newData = data.slice(currentPage * OFFSET, (currentPage + 1) * OFFSET);
             if (newData.size > 0) {
                 currentVisibleData = currentVisibleData.concat(newData);
@@ -62,6 +69,10 @@ export default function (state = initStore, { type, payload }) {
                     .setIn(['feed', 'visibleData'], currentVisibleData);
             }
             return state;
+        }
+        case types.SWITCH_IMAGE_STATUS: {
+            const { cellIndex, imageIndex, status } = payload;
+            return state.setIn(['feed', 'visibleData', cellIndex, 'src', imageIndex, 'status'], status);
         }
         case types.REJECT_TIMELINE: {
             return state.setIn(['timeline', 'status'], 'REJECT');

@@ -33,5 +33,5 @@ function* requestFeedNextPage() {
 }
 
 export function* throttleRequestFeedNextPage() {
-    yield throttle(5000, types.FEED_NEXT_PAGE_SAGA, requestFeedNextPage);
+    yield throttle(1000, types.FEED_NEXT_PAGE_SAGA, requestFeedNextPage);
 }

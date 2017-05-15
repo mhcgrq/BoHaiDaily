@@ -22,7 +22,7 @@ class TimeLine extends PureComponent {
         this.props.dispatch(getTimeline(1));
     }
     render() {
-        return (<FlatList data={this.props.data.toJS()} renderItem={this.renderItem}/>);
+        return (<FlatList data={this.props.data.toJS()} renderItem={this.renderItem} keyExtractor={(item) => item.title}/>);
     }
 }
 const mapPropsToState = (state) => ({

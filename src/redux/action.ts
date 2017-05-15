@@ -1,5 +1,4 @@
 import * as types from './actionType';
-import { LoadStatus } from '../ui/component/Picture';
 
 export function getTimeline(page: number) {
     return {
@@ -30,9 +29,9 @@ export function requestFeedNextPage() {
     return { type: types.FEED_NEXT_PAGE_SAGA };
 }
 
-export function swtichImageStatus(imgSrc: string, status: LoadStatus) {
+export function swtichImageStatus(cellIndex: number, imageIndex: number, status: 'REQUEST' | 'RESOLVE' | 'REJECT') {
     return {
         type: types.SWITCH_IMAGE_STATUS,
-        payload: { imgSrc, status },
+        payload: { cellIndex, imageIndex, status },
     };
 }

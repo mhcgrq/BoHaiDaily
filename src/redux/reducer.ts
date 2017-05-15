@@ -5,6 +5,16 @@ import * as types from './actionType';
 
 const OFFSET = 2;
 
+export interface FeedItemSrcList {
+    src: string;
+    status: 'REQUEST' | 'RESOLVE' | 'REJECT';
+}
+
+export interface FeedItem {
+    title: string;
+    src: FeedItemSrcList[];
+}
+
 export default function(state = initStore, { type, payload }: { type: string, payload: any }) {
     switch (type) {
         case types.REQUEST_TIMELINE: {
@@ -30,18 +40,18 @@ export default function(state = initStore, { type, payload }: { type: string, pa
         case types.RESOLVE_FEED: {
             const res = payload.res;
             const $ = cheerio.load(res);
-            const feedArr: Array<{ title: string; src: string[]; }> = [];
+            const feedArr: FeedItem[] = [];
             $('.article-content')
                 .find('p')
                 .each((_, p) => {
                     const pText = $(p).text();
                     const isTitle = /^【\d+】/.test(pText);
                     if (isTitle) {
-                        const feed: { title: string; src: string[]; } = { title: pText, src: [] };
+                        const feed: FeedItem = { title: pText, src: [] };
                         let nextP = $(p).next();
                         while ($(nextP).children().is('img')) {
                             const src = $(nextP).children('img').attr('src');
-                            feed.src.push(src);
+                            feed.src.push({ src, status: 'REQUEST' });
                             nextP = nextP.next();
                         }
                         feedArr.push(feed);
@@ -56,6 +66,13 @@ export default function(state = initStore, { type, payload }: { type: string, pa
             const currentPage = state.getIn(['feed', 'page']);
             const data = state.getIn(['feed', 'data']);
             let currentVisibleData = state.getIn(['feed', 'visibleData']);
+            const isAllResolved = currentVisibleData.every((item: any) => {
+                return item.get('src')
+                    .every((s: any) => s.get('status') === 'RESOLVE');
+            });
+            if (!isAllResolved) {
+                return state;
+            }
             const newData = data.slice(currentPage * OFFSET, (currentPage + 1) * OFFSET);
             if (newData.size > 0) {
                 currentVisibleData = currentVisibleData.concat(newData);
@@ -64,6 +81,10 @@ export default function(state = initStore, { type, payload }: { type: string, pa
                     .setIn(['feed', 'visibleData'], currentVisibleData);
             }
             return state;
+        }
+        case types.SWITCH_IMAGE_STATUS: {
+            const { cellIndex, imageIndex, status } = payload;
+            return state.setIn(['feed', 'visibleData', cellIndex, 'src', imageIndex, 'status'], status);
         }
         case types.REJECT_TIMELINE: {
             return state.setIn(['timeline', 'status'], 'REJECT');

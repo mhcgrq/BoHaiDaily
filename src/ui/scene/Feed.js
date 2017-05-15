@@ -1,26 +1,24 @@
 import React, { PureComponent } from 'react';
 import { FlatList, } from 'react-native';
 import { connect } from 'react-redux';
-import FeedCell, { CELL_HEIGHT } from '../component/FeedCell';
-import { getFeed, requestFeedNextPage } from '../../redux/action';
+import FeedCell from '../component/FeedCell';
+import { getFeed, requestFeedNextPage, swtichImageStatus } from '../../redux/action';
 class Feed extends PureComponent {
     constructor() {
         super(...arguments);
         this.state = {
             refreshing: true,
         };
-        this.getItemLayout = (_, index) => ({
-            length: CELL_HEIGHT,
-            offset: CELL_HEIGHT * index,
-            index,
-        });
         this.renderItem = (info) => {
-            return (<FeedCell {...info.item}/>);
+            return (<FeedCell {...info.item} swtichImageStatus={this.swtichImageStatus} cellIndex={info.index}/>);
         };
         this.onEndReached = () => {
             if (this.props.data.size < this.props.totalLength) {
                 this.props.dispatch(requestFeedNextPage());
             }
+        };
+        this.swtichImageStatus = (cellIndex, imageIndex, status) => {
+            this.props.dispatch(swtichImageStatus(cellIndex, imageIndex, status));
         };
         this.onViewableItemsChanged = (info) => {
             console.log('info: ', info);
@@ -30,7 +28,7 @@ class Feed extends PureComponent {
         this.props.dispatch(getFeed(this.props.navigation.state.params.href));
     }
     render() {
-        return (<FlatList data={this.props.data.toJS()} renderItem={this.renderItem} getItemLayout={this.getItemLayout} onViewableItemsChanged={this.onViewableItemsChanged} keyExtractor={(item) => item.title} onEndReached={this.onEndReached} onEndReachedThreshold={0.9}/>);
+        return (<FlatList data={this.props.data.toJS()} renderItem={this.renderItem} onViewableItemsChanged={this.onViewableItemsChanged} keyExtractor={(item) => item.title} onEndReached={this.onEndReached} onEndReachedThreshold={0}/>);
     }
 }
 const mapPropsToState = (state) => ({

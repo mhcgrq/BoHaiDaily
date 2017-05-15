@@ -11,28 +11,16 @@ const style = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         width: WINDOW_WIDTH,
-        marginBottom: MARGIN,
-        padding: PADDING,
-        borderRadius: 30,
         backgroundColor: '#fff',
     },
     title: {
-        // justifyContent: 'center',
-        height: 30,
-        fontSize: 20,
-        lineHeight: 30,
-    },
-    image: {
-        // alignItems: 'center',
-        // justifyContent: 'center',
-        width: WINDOW_WIDTH - PADDING,
-        height: WINDOW_WIDTH - PADDING,
+        fontSize: 16,
     },
 });
 export default function FeedCell(props) {
     return (<View key={props.title} style={style.view}>
             <Text style={style.title}>{props.title}</Text>
-            {props.src.map((s) => (<Picture imgStyle={style.image} key={s} src={s} title={props.title}/>))}
+            {props.src.map((s, index) => (<Picture cellIndex={props.cellIndex} swtichImageStatus={props.swtichImageStatus} imageIndex={index} key={s.src} src={s.src} title={props.title}/>))}
         </View>);
 }
 //# sourceMappingURL=FeedCell.js.map

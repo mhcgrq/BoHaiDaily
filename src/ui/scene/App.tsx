@@ -1,6 +1,6 @@
+/// <reference path="../../../typing.d.ts" />
 import React, { PureComponent } from 'react';
 import { Dispatch } from 'redux';
-// import { initNavState } from '../redux/navReducer';
 import { connect } from 'react-redux';
 import { StackNavigator, addNavigationHelpers } from 'react-navigation';
 import TimeLine from './Timeline';

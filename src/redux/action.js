@@ -23,10 +23,10 @@ export function navBack() {
 export function requestFeedNextPage() {
     return { type: types.FEED_NEXT_PAGE_SAGA };
 }
-export function swtichImageStatus(imgSrc, status) {
+export function swtichImageStatus(cellIndex, imageIndex, status) {
     return {
         type: types.SWITCH_IMAGE_STATUS,
-        payload: { imgSrc, status },
+        payload: { cellIndex, imageIndex, status },
     };
 }
 //# sourceMappingURL=action.js.map

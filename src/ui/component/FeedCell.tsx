@@ -6,10 +6,11 @@ import {
     Dimensions,
 } from 'react-native';
 import Picture from './Picture';
+import { FeedItem } from '../../redux/reducer';
 
-interface Props {
-    title: string;
-    src: string[];
+interface Props extends FeedItem {
+    cellIndex: number;
+    swtichImageStatus: (cellIndex: number, imageIndex: number, status: 'REQUEST' | 'RESOLVE' | 'REJECT') => void;
 }
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
@@ -23,22 +24,10 @@ const style = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         width: WINDOW_WIDTH,
-        marginBottom: MARGIN,
-        padding: PADDING,
-        borderRadius: 30,
         backgroundColor: '#fff',
     },
     title: {
-        // justifyContent: 'center',
-        height: 30,
-        fontSize: 20,
-        lineHeight: 30,
-    },
-    image: {
-        // alignItems: 'center',
-        // justifyContent: 'center',
-        width: WINDOW_WIDTH - PADDING,
-        height: WINDOW_WIDTH - PADDING,
+        fontSize: 16,
     },
 });
 
@@ -47,11 +36,13 @@ export default function FeedCell(props: Props) {
         <View key={props.title} style={style.view}>
             <Text style={style.title}>{props.title}</Text>
             {
-                props.src.map((s) => (
+                props.src.map((s, index) => (
                     <Picture
-                        imgStyle={style.image}
-                        key={s}
-                        src={s}
+                        cellIndex={props.cellIndex}
+                        swtichImageStatus={props.swtichImageStatus}
+                        imageIndex={index}
+                        key={s.src}
+                        src={s.src}
                         title={props.title}
                     />
                 ))

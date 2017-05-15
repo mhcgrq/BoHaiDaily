@@ -31,6 +31,6 @@ function* requestFeedNextPage() {
     yield put({ type: types.FEED_NEXT_PAGE });
 }
 export function* throttleRequestFeedNextPage() {
-    yield throttle(5000, types.FEED_NEXT_PAGE_SAGA, requestFeedNextPage);
+    yield throttle(1000, types.FEED_NEXT_PAGE_SAGA, requestFeedNextPage);
 }
 //# sourceMappingURL=saga.js.map

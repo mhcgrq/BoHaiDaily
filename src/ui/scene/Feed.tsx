@@ -7,8 +7,9 @@ import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
 import { Dispatch } from 'redux';
 import { NavigationNavigatorProps } from 'react-navigation';
-import FeedCell, { CELL_HEIGHT } from '../component/FeedCell';
-import { getFeed, requestFeedNextPage } from '../../redux/action';
+import FeedCell from '../component/FeedCell';
+import { getFeed, requestFeedNextPage, swtichImageStatus } from '../../redux/action';
+import { FeedItem } from '../../redux/reducer';
 
 interface Props extends NavigationNavigatorProps<{ title: string; href: string; }> {
     status: string;
@@ -33,26 +34,29 @@ class Feed extends PureComponent<Props, State> {
             <FlatList
                 data={this.props.data.toJS()}
                 renderItem={this.renderItem}
-                getItemLayout={this.getItemLayout}
                 onViewableItemsChanged={this.onViewableItemsChanged}
                 keyExtractor={(item) => item.title}
                 onEndReached={this.onEndReached}
-                onEndReachedThreshold={0.9}
+                onEndReachedThreshold={0}
             />
         );
     }
-    private getItemLayout = (_, index) => ({
-        length: CELL_HEIGHT,
-        offset: CELL_HEIGHT * index,
-        index,
-    })
-    private renderItem = (info: { item: { title: string; src: string[]; } }) => {
-        return (<FeedCell {...info.item} />);
+    private renderItem = (info: { item: FeedItem, index: number }) => {
+        return (
+            <FeedCell
+                {...info.item}
+                swtichImageStatus={this.swtichImageStatus}
+                cellIndex={info.index}
+            />
+        );
     }
     private onEndReached = () => {
         if (this.props.data.size < this.props.totalLength) {
             this.props.dispatch(requestFeedNextPage());
         }
+    }
+    private swtichImageStatus = (cellIndex: number, imageIndex: number, status: 'REQUEST' | 'RESOLVE' | 'REJECT') => {
+        this.props.dispatch(swtichImageStatus(cellIndex, imageIndex, status));
     }
     private onViewableItemsChanged = (info: {viewableItems: ViewToken[], changed: ViewToken[]}) => {
         console.log('info: ', info);

@@ -26,6 +26,7 @@ class TimeLine extends PureComponent<Props, {}> {
             <FlatList
                 data={this.props.data.toJS()}
                 renderItem={this.renderItem}
+                keyExtractor={(item) => item.title}
             />
         );
     }
