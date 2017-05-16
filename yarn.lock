@@ -6,6 +6,13 @@
   version "0.22.1"
   resolved "http://registry.npm.taobao.org/@types/cheerio/download/@types/cheerio-0.22.1.tgz#740c4cd8c4d3f3074f83b9ab62e711eac2c764ce"
 
+"@types/react-native-swiper@^1.5.5":
+  version "1.5.5"
+  resolved "http://registry.npm.taobao.org/@types/react-native-swiper/download/@types/react-native-swiper-1.5.5.tgz#cb2d9d65428c8c9878317d4d8828884ac989a6d6"
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
 "@types/react-native@*", "@types/react-native@^0.44.0":
   version "0.44.0"
   resolved "http://registry.npm.taobao.org/@types/react-native/download/@types/react-native-0.44.0.tgz#fb3c136507a444ad2971ca0a5482f03d15df03a3"
@@ -3743,6 +3750,10 @@ react-native-stream@^0.1.9:
   dependencies:
     base64-js "^1.2.0"
     ieee754 "^1.1.8"
+
+react-native-swiper@^1.5.4:
+  version "1.5.4"
+  resolved "http://registry.npm.taobao.org/react-native-swiper/download/react-native-swiper-1.5.4.tgz#a85535b5374ef8d605a7a720e447ac46816ac448"
 
 react-native-tab-view@^0.0.61:
   version "0.0.61"

@@ -6,6 +6,7 @@ import {
     Dimensions,
 } from 'react-native';
 import Picture from './Picture';
+import ImageView from './ImageView';
 import { FeedItem } from '../../redux/reducer';
 
 interface Props extends FeedItem {
@@ -33,20 +34,24 @@ const style = StyleSheet.create({
 
 export default function FeedCell(props: Props) {
     return (
-        <View key={props.title} style={style.view}>
+        <View style={style.view}>
             <Text style={style.title}>{props.title}</Text>
-            {
-                props.src.map((s, index) => (
-                    <Picture
-                        cellIndex={props.cellIndex}
-                        swtichImageStatus={props.swtichImageStatus}
-                        imageIndex={index}
-                        key={s.src}
-                        src={s.src}
-                        title={props.title}
-                    />
-                ))
-            }
+            <ImageView
+                style={{ height: WINDOW_WIDTH }}
+            >
+                {
+                    props.src.map((s, index) => (
+                        <Picture
+                            cellIndex={props.cellIndex}
+                            swtichImageStatus={props.swtichImageStatus}
+                            imageIndex={index}
+                            key={s.src}
+                            src={s.src}
+                            title={props.title}
+                        />
+                    ))
+                }
+            </ImageView>
         </View>
     );
 }

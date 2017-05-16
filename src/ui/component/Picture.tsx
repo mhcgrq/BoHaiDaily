@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Circle } from 'react-native-progress';
 
-const { height: WINDOW_HEIGHT } = Dimensions.get('window');
+const { width: WINDOW_WIDTH } = Dimensions.get('window');
 
 interface Props {
     src: string;
@@ -28,8 +28,9 @@ interface State {
     status: LoadStatus;
     style: {
         width: string | number;
-        aspectRatio: number;
-        maxHeight: number;
+        height: number;
+        // aspectRatio: number;
+        // maxHeight: number;
     };
 }
 
@@ -38,9 +39,10 @@ const initState: State = {
     progress: 0,
     status: LoadStatus.LOADING,
     style: {
-        width: '100%',
-        aspectRatio: 1,
-        maxHeight: WINDOW_HEIGHT - 90,
+        width: WINDOW_WIDTH,
+        height: WINDOW_WIDTH,
+        // aspectRatio: 1,
+        // maxHeight: WINDOW_HEIGHT - 90,
     },
 };
 
@@ -52,19 +54,19 @@ export default class Picture extends PureComponent<Props, State> {
     // private static placeholder = require('../../../assets/placeholder.png');
     public state = initState;
     public componentDidMount() {
-        Image.getSize(
-            this.props.src,
-            (width: number, height: number) => {
-                this.setState({
-                    style: {
-                        width: '100%',
-                        aspectRatio: width / height,
-                        maxHeight: WINDOW_HEIGHT - 90,
-                    },
-                });
-            },
-            () => {},
-        );
+        // Image.getSize(
+        //     this.props.src,
+        //     (width: number, height: number) => {
+        //         this.setState({
+        //             style: {
+        //                 width: '100%',
+        //                 aspectRatio: width / height,
+        //                 maxHeight: WINDOW_HEIGHT - 90,
+        //             },
+        //         });
+        //     },
+        //     () => {},
+        // );
     }
     public render() {
         return (

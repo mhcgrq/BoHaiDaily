@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Image, View, Dimensions, TouchableWithoutFeedback, StyleSheet, } from 'react-native';
 import { Circle } from 'react-native-progress';
-const { height: WINDOW_HEIGHT } = Dimensions.get('window');
+const { width: WINDOW_WIDTH } = Dimensions.get('window');
 export var LoadStatus;
 (function (LoadStatus) {
     LoadStatus[LoadStatus["LOADING"] = 0] = "LOADING";
@@ -13,9 +13,8 @@ const initState = {
     progress: 0,
     status: LoadStatus.LOADING,
     style: {
-        width: '100%',
-        aspectRatio: 1,
-        maxHeight: WINDOW_HEIGHT - 90,
+        width: WINDOW_WIDTH,
+        height: WINDOW_WIDTH,
     },
 };
 export default class Picture extends PureComponent {
@@ -45,15 +44,19 @@ export default class Picture extends PureComponent {
         };
     }
     componentDidMount() {
-        Image.getSize(this.props.src, (width, height) => {
-            this.setState({
-                style: {
-                    width: '100%',
-                    aspectRatio: width / height,
-                    maxHeight: WINDOW_HEIGHT - 90,
-                },
-            });
-        }, () => { });
+        // Image.getSize(
+        //     this.props.src,
+        //     (width: number, height: number) => {
+        //         this.setState({
+        //             style: {
+        //                 width: '100%',
+        //                 aspectRatio: width / height,
+        //                 maxHeight: WINDOW_HEIGHT - 90,
+        //             },
+        //         });
+        //     },
+        //     () => {},
+        // );
     }
     render() {
         return (<View style={style.view} key={this.state.randomKey}>

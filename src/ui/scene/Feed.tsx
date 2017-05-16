@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import {
     FlatList,
-    ViewToken,
+    // ViewToken,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
@@ -32,9 +32,17 @@ class Feed extends PureComponent<Props, State> {
     public render() {
         return (
             <FlatList
-                data={this.props.data.toJS()}
+                data={this.props.data.toJS().filter((item: any, index: number) => {
+                    if (index === 0) {
+                        return true;
+                    }
+                    if (index !== 0 && item.src.length === 1) {
+                        return false;
+                    }
+                    return true;
+                })}
                 renderItem={this.renderItem}
-                onViewableItemsChanged={this.onViewableItemsChanged}
+                // onViewableItemsChanged={this.onViewableItemsChanged}
                 keyExtractor={(item) => item.title}
                 onEndReached={this.onEndReached}
                 onEndReachedThreshold={0}
@@ -58,9 +66,9 @@ class Feed extends PureComponent<Props, State> {
     private swtichImageStatus = (cellIndex: number, imageIndex: number, status: 'REQUEST' | 'RESOLVE' | 'REJECT') => {
         this.props.dispatch(swtichImageStatus(cellIndex, imageIndex, status));
     }
-    private onViewableItemsChanged = (info: {viewableItems: ViewToken[], changed: ViewToken[]}) => {
-        console.log('info: ', info);
-    }
+    // private onViewableItemsChanged = (info: {viewableItems: ViewToken[], changed: ViewToken[]}) => {
+    //     console.log('info: ', info);
+    // }
 }
 
 const mapPropsToState = (state: any) => ({

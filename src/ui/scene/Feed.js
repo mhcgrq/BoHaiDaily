@@ -20,15 +20,25 @@ class Feed extends PureComponent {
         this.swtichImageStatus = (cellIndex, imageIndex, status) => {
             this.props.dispatch(swtichImageStatus(cellIndex, imageIndex, status));
         };
-        this.onViewableItemsChanged = (info) => {
-            console.log('info: ', info);
-        };
+        // private onViewableItemsChanged = (info: {viewableItems: ViewToken[], changed: ViewToken[]}) => {
+        //     console.log('info: ', info);
+        // }
     }
     componentDidMount() {
         this.props.dispatch(getFeed(this.props.navigation.state.params.href));
     }
     render() {
-        return (<FlatList data={this.props.data.toJS()} renderItem={this.renderItem} onViewableItemsChanged={this.onViewableItemsChanged} keyExtractor={(item) => item.title} onEndReached={this.onEndReached} onEndReachedThreshold={0}/>);
+        return (<FlatList data={this.props.data.toJS().filter((item, index) => {
+            if (index === 0) {
+                return true;
+            }
+            if (index !== 0 && item.src.length === 1) {
+                return false;
+            }
+            return true;
+        })} renderItem={this.renderItem} 
+        // onViewableItemsChanged={this.onViewableItemsChanged}
+        keyExtractor={(item) => item.title} onEndReached={this.onEndReached} onEndReachedThreshold={0}/>);
     }
 }
 const mapPropsToState = (state) => ({

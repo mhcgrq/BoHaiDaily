@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions, } from 'react-native';
 import Picture from './Picture';
+import ImageView from './ImageView';
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const TITLE_HEIGHT = 50;
 const PADDING = 20;
@@ -18,9 +19,11 @@ const style = StyleSheet.create({
     },
 });
 export default function FeedCell(props) {
-    return (<View key={props.title} style={style.view}>
+    return (<View style={style.view}>
             <Text style={style.title}>{props.title}</Text>
-            {props.src.map((s, index) => (<Picture cellIndex={props.cellIndex} swtichImageStatus={props.swtichImageStatus} imageIndex={index} key={s.src} src={s.src} title={props.title}/>))}
+            <ImageView style={{ height: WINDOW_WIDTH }}>
+                {props.src.map((s, index) => (<Picture cellIndex={props.cellIndex} swtichImageStatus={props.swtichImageStatus} imageIndex={index} key={s.src} src={s.src} title={props.title}/>))}
+            </ImageView>
         </View>);
 }
 //# sourceMappingURL=FeedCell.js.map
