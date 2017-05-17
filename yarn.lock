@@ -6,22 +6,15 @@
   version "0.22.1"
   resolved "http://registry.npm.taobao.org/@types/cheerio/download/@types/cheerio-0.22.1.tgz#740c4cd8c4d3f3074f83b9ab62e711eac2c764ce"
 
-"@types/react-native-swiper@^1.5.5":
-  version "1.5.5"
-  resolved "http://registry.npm.taobao.org/@types/react-native-swiper/download/@types/react-native-swiper-1.5.5.tgz#cb2d9d65428c8c9878317d4d8828884ac989a6d6"
-  dependencies:
-    "@types/react" "*"
-    "@types/react-native" "*"
-
 "@types/react-native@*", "@types/react-native@^0.44.0":
-  version "0.44.0"
-  resolved "http://registry.npm.taobao.org/@types/react-native/download/@types/react-native-0.44.0.tgz#fb3c136507a444ad2971ca0a5482f03d15df03a3"
+  version "0.44.1"
+  resolved "http://registry.npm.taobao.org/@types/react-native/download/@types/react-native-0.44.1.tgz#51f173c7a377c73015f3fd37f1dbe63915ae507f"
   dependencies:
     "@types/react" "*"
 
 "@types/react-navigation@^1.0.1":
-  version "1.0.1"
-  resolved "http://registry.npm.taobao.org/@types/react-navigation/download/@types/react-navigation-1.0.1.tgz#1246e707239520b2f1dc04a0030d595d314de5b7"
+  version "1.0.2"
+  resolved "http://registry.npm.taobao.org/@types/react-navigation/download/@types/react-navigation-1.0.2.tgz#ffc3c98946d50699b5eb5b2cfcaa15a25a584796"
   dependencies:
     "@types/react" "*"
     "@types/react-native" "*"
@@ -464,8 +457,8 @@ babel-plugin-jest-hoist@^20.0.1:
   resolved "http://registry.npm.taobao.org/babel-plugin-jest-hoist/download/babel-plugin-jest-hoist-20.0.1.tgz#1b9cc322cff704d3812d1bca8dccd12205eedfd5"
 
 babel-plugin-module-resolver@^2.7.0:
-  version "2.7.0"
-  resolved "http://registry.npm.taobao.org/babel-plugin-module-resolver/download/babel-plugin-module-resolver-2.7.0.tgz#9c1cb2fcf2a1bdb45e91c6c985b96311123797f9"
+  version "2.7.1"
+  resolved "http://registry.npm.taobao.org/babel-plugin-module-resolver/download/babel-plugin-module-resolver-2.7.1.tgz#18be3c42ddf59f7a456c9e0512cd91394f6e4be1"
   dependencies:
     find-babel-config "^1.0.1"
     glob "^7.1.1"
@@ -1581,17 +1574,11 @@ debug@2.6.3:
   dependencies:
     ms "0.7.2"
 
-debug@2.6.4:
-  version "2.6.4"
-  resolved "http://registry.npm.taobao.org/debug/download/debug-2.6.4.tgz#7586a9b3c39741c0282ae33445c4e8ac74734fe0"
+debug@2.6.7, debug@^2.1.1, debug@^2.2.0, debug@^2.6.3:
+  version "2.6.7"
+  resolved "http://registry.npm.taobao.org/debug/download/debug-2.6.7.tgz#92bad1f6d05bbb6bba22cca88bcd0ec894c2861e"
   dependencies:
-    ms "0.7.3"
-
-debug@^2.1.1, debug@^2.2.0, debug@^2.6.3:
-  version "2.6.6"
-  resolved "http://registry.npm.taobao.org/debug/download/debug-2.6.6.tgz#a9fa6fbe9ca43cf1e79f73b75c0189cbb7d6db5a"
-  dependencies:
-    ms "0.7.3"
+    ms "2.0.0"
 
 debug@~2.2.0:
   version "2.2.0"
@@ -1975,10 +1962,10 @@ finalhandler@0.4.0:
     unpipe "~1.0.0"
 
 finalhandler@~1.0.0:
-  version "1.0.2"
-  resolved "http://registry.npm.taobao.org/finalhandler/download/finalhandler-1.0.2.tgz#d0e36f9dbc557f2de14423df6261889e9d60c93a"
+  version "1.0.3"
+  resolved "http://registry.npm.taobao.org/finalhandler/download/finalhandler-1.0.3.tgz#ef47e77950e999780e86022a560e3217e0d0cc89"
   dependencies:
-    debug "2.6.4"
+    debug "2.6.7"
     encodeurl "~1.0.1"
     escape-html "~1.0.3"
     on-finished "~2.3.0"
@@ -2925,8 +2912,8 @@ jws@^3.1.4:
     safe-buffer "^5.0.1"
 
 kind-of@^3.0.2:
-  version "3.2.0"
-  resolved "http://registry.npm.taobao.org/kind-of/download/kind-of-3.2.0.tgz#b58abe4d5c044ad33726a8c1525b48cf891bff07"
+  version "3.2.2"
+  resolved "http://registry.npm.taobao.org/kind-of/download/kind-of-3.2.2.tgz#31ea21a734bab9bbb0f32466d893aea51e4a3c64"
   dependencies:
     is-buffer "^1.1.5"
 
@@ -3287,13 +3274,13 @@ ms@0.7.1:
   version "0.7.1"
   resolved "http://registry.npm.taobao.org/ms/download/ms-0.7.1.tgz#9cd13c03adbff25b65effde7ce864ee952017098"
 
-ms@0.7.2:
+ms@0.7.2, ms@^0.7.1:
   version "0.7.2"
   resolved "http://registry.npm.taobao.org/ms/download/ms-0.7.2.tgz#ae25cf2512b3885a1d95d7f037868d8431124765"
 
-ms@0.7.3, ms@^0.7.1:
-  version "0.7.3"
-  resolved "http://registry.npm.taobao.org/ms/download/ms-0.7.3.tgz#708155a5e44e33f5fd0fc53e81d0d40a91be1fff"
+ms@2.0.0:
+  version "2.0.0"
+  resolved "http://registry.npm.taobao.org/ms/download/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
 
 multiparty@3.3.2:
   version "3.3.2"
@@ -3750,10 +3737,6 @@ react-native-stream@^0.1.9:
   dependencies:
     base64-js "^1.2.0"
     ieee754 "^1.1.8"
-
-react-native-swiper@^1.5.4:
-  version "1.5.4"
-  resolved "http://registry.npm.taobao.org/react-native-swiper/download/react-native-swiper-1.5.4.tgz#a85535b5374ef8d605a7a720e447ac46816ac448"
 
 react-native-tab-view@^0.0.61:
   version "0.0.61"
@@ -4454,9 +4437,9 @@ socketcluster-client@^5.3.1:
     sc-formatter "3.0.x"
     ws "1.1.2"
 
-socketcluster-server@5.x.x, socketcluster-server@~5.10.2:
-  version "5.10.2"
-  resolved "http://registry.npm.taobao.org/socketcluster-server/download/socketcluster-server-5.10.2.tgz#d4ce2316b54b5f50e8d771382ffc72bc16e022dd"
+socketcluster-server@5.x.x, socketcluster-server@~5.11.0:
+  version "5.11.0"
+  resolved "http://registry.npm.taobao.org/socketcluster-server/download/socketcluster-server-5.11.0.tgz#93796eae08890bd9e0318328df3b7fb21acda2fb"
   dependencies:
     async "2.0.0"
     base64id "0.1.0"
@@ -4468,12 +4451,12 @@ socketcluster-server@5.x.x, socketcluster-server@~5.10.2:
     sc-formatter "~3.0.0"
     sc-simple-broker "~2.0.0"
     uuid "3.0.1"
-    uws "0.14.1"
+    uws "0.14.5"
     ws "1.1.1"
 
 socketcluster@^5.0.4:
-  version "5.10.2"
-  resolved "http://registry.npm.taobao.org/socketcluster/download/socketcluster-5.10.2.tgz#62afeed9865c2e0cb1aa4a2fe62220b20e7a8c8e"
+  version "5.11.0"
+  resolved "http://registry.npm.taobao.org/socketcluster/download/socketcluster-5.11.0.tgz#05979569cfc63f295c86c186c1c0524f8ad88184"
   dependencies:
     async "2.0.0"
     base64id "0.1.0"
@@ -4485,7 +4468,7 @@ socketcluster@^5.0.4:
     sc-domain "~1.0.1"
     sc-emitter "~1.1.0"
     sc-errors "~1.1.0"
-    socketcluster-server "~5.10.2"
+    socketcluster-server "~5.11.0"
     uid-number "0.0.5"
     uuid "3.0.1"
 
@@ -4819,9 +4802,9 @@ uuid@3.0.1, uuid@^3.0.0:
   version "3.0.1"
   resolved "http://registry.npm.taobao.org/uuid/download/uuid-3.0.1.tgz#6544bba2dfda8c1cf17e629a3a305e2bb1fee6c1"
 
-uws@0.14.1:
-  version "0.14.1"
-  resolved "http://registry.npm.taobao.org/uws/download/uws-0.14.1.tgz#89b8eb7bced272c65621472e878c57f4e0e00640"
+uws@0.14.5:
+  version "0.14.5"
+  resolved "http://registry.npm.taobao.org/uws/download/uws-0.14.5.tgz#67aaf33c46b2a587a5f6666d00f7691328f149dc"
 
 validate-npm-package-license@^3.0.1:
   version "3.0.1"

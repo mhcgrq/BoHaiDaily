@@ -1,8 +1,8 @@
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions, NavigationNavigateAction } from 'react-navigation';
 import { Navigator } from '../ui/scene/App';
 import * as types from './actionType';
 
-const firstAction = Navigator.router.getActionForPathAndParams('TimeLine');
+const firstAction = Navigator.router.getActionForPathAndParams('TimeLine') as NavigationNavigateAction;
 export const initNavState = Navigator.router.getStateForAction(firstAction);
 
 export default function nav(state = initNavState, { type, payload }: { type: string, payload: any }) {

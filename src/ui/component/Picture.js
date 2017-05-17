@@ -44,6 +44,7 @@ export default class Picture extends PureComponent {
         };
     }
     componentDidMount() {
+        Image.prefetch(this.props.src);
         // Image.getSize(
         //     this.props.src,
         //     (width: number, height: number) => {
@@ -61,7 +62,7 @@ export default class Picture extends PureComponent {
     render() {
         return (<View style={style.view} key={this.state.randomKey}>
                 <TouchableWithoutFeedback onPress={this.handlePress}>
-                    <Image source={{ uri: this.props.src }} style={this.state.style} resizeMode="contain" onProgress={this.onProgress} onError={this.onError} onLoad={this.onLoad}>
+                    <Image source={{ uri: this.props.src, cache: 'force-cache' }} style={this.state.style} resizeMode="contain" onProgress={this.onProgress} onError={this.onError} onLoad={this.onLoad}>
                         <Circle progress={this.state.progress} size={100} style={[
             style.progress,
             { display: this.state.status === LoadStatus.LOADED ? 'none' : 'flex' },

@@ -54,6 +54,7 @@ export default class Picture extends PureComponent<Props, State> {
     // private static placeholder = require('../../../assets/placeholder.png');
     public state = initState;
     public componentDidMount() {
+        Image.prefetch(this.props.src);
         // Image.getSize(
         //     this.props.src,
         //     (width: number, height: number) => {
@@ -73,7 +74,7 @@ export default class Picture extends PureComponent<Props, State> {
             <View style={style.view} key={this.state.randomKey}>
                 <TouchableWithoutFeedback onPress={this.handlePress}>
                     <Image
-                        source={{ uri: this.props.src }}
+                        source={{ uri: this.props.src, cache: 'force-cache' }}
                         style={this.state.style}
                         resizeMode="contain"
                         onProgress={this.onProgress}
