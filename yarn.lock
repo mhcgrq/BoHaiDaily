@@ -6,6 +6,10 @@
   version "0.22.1"
   resolved "http://registry.npm.taobao.org/@types/cheerio/download/@types/cheerio-0.22.1.tgz#740c4cd8c4d3f3074f83b9ab62e711eac2c764ce"
 
+"@types/react-native-fetch-blob@^0.10.1":
+  version "0.10.1"
+  resolved "http://registry.npm.taobao.org/@types/react-native-fetch-blob/download/@types/react-native-fetch-blob-0.10.1.tgz#ad9009d4bc83005b75d06aa136343d915f6150a8"
+
 "@types/react-native@*", "@types/react-native@^0.44.0":
   version "0.44.1"
   resolved "http://registry.npm.taobao.org/@types/react-native/download/@types/react-native-0.44.1.tgz#51f173c7a377c73015f3fd37f1dbe63915ae507f"
@@ -1504,6 +1508,10 @@ cryptiles@2.x.x:
   dependencies:
     boom "2.x.x"
 
+crypto-js@^3.1.9-1:
+  version "3.1.9-1"
+  resolved "http://registry.npm.taobao.org/crypto-js/download/crypto-js-3.1.9-1.tgz#fda19e761fc077e01ffbfdc6e9fdfc59e8806cd8"
+
 csrf@~3.0.0:
   version "3.0.6"
   resolved "http://registry.npm.taobao.org/csrf/download/csrf-3.0.6.tgz#b61120ddceeafc91e76ed5313bb5c0b2667b710a"
@@ -2091,7 +2099,7 @@ glob-parent@^2.0.0:
   dependencies:
     is-glob "^2.0.0"
 
-glob@^7.0.3, glob@^7.0.5, glob@^7.1.1:
+glob@^7.0.3, glob@^7.0.5, glob@^7.0.6, glob@^7.1.1:
   version "7.1.1"
   resolved "http://registry.npm.taobao.org/glob/download/glob-7.1.1.tgz#805211df04faaf1c63a3600306cdf5ade50b2ec8"
   dependencies:
@@ -3724,6 +3732,23 @@ react-native-drawer-layout@1.2.0:
   resolved "http://registry.npm.taobao.org/react-native-drawer-layout/download/react-native-drawer-layout-1.2.0.tgz#ae274ee17fadce58d9d7ecef4797d9fad672af74"
   dependencies:
     react-native-dismiss-keyboard "1.0.0"
+
+react-native-fetch-blob@^0.10.5:
+  version "0.10.5"
+  resolved "http://registry.npm.taobao.org/react-native-fetch-blob/download/react-native-fetch-blob-0.10.5.tgz#498e5437ad604db126b46e4a06cd9cbf33d1ea42"
+  dependencies:
+    base-64 "0.1.0"
+    glob "^7.0.6"
+
+react-native-image-progress@^0.6.0:
+  version "0.6.0"
+  resolved "http://registry.npm.taobao.org/react-native-image-progress/download/react-native-image-progress-0.6.0.tgz#14614add12beaa247a052e5a52e6a9fee0fb8c67"
+
+react-native-img-cache@^1.4.0:
+  version "1.4.0"
+  resolved "http://registry.npm.taobao.org/react-native-img-cache/download/react-native-img-cache-1.4.0.tgz#b0a2495aa0289a35b15f7ff24c5769bb4a2b991f"
+  dependencies:
+    crypto-js "^3.1.9-1"
 
 react-native-progress@^3.2.1:
   version "3.2.1"

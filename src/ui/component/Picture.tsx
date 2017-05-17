@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
 import {
-    Image,
     View,
     Dimensions,
     TouchableWithoutFeedback,
     StyleSheet,
 } from 'react-native';
+import { CustomCachedImage, ImageCache } from 'react-native-img-cache';
+import Image from 'react-native-image-progress';
 import { Circle } from 'react-native-progress';
 
 const { width: WINDOW_WIDTH } = Dimensions.get('window');
@@ -54,7 +55,10 @@ export default class Picture extends PureComponent<Props, State> {
     // private static placeholder = require('../../../assets/placeholder.png');
     public state = initState;
     public componentDidMount() {
-        Image.prefetch(this.props.src);
+        setTimeout(() => {
+            console.log(ImageCache.get());
+        }, 10000);
+        // Image.prefetch(this.props.src);
         // Image.getSize(
         //     this.props.src,
         //     (width: number, height: number) => {
@@ -73,49 +77,57 @@ export default class Picture extends PureComponent<Props, State> {
         return (
             <View style={style.view} key={this.state.randomKey}>
                 <TouchableWithoutFeedback onPress={this.handlePress}>
-                    <Image
-                        source={{ uri: this.props.src, cache: 'force-cache' }}
+                    <CustomCachedImage
+                        component={Image}
+                        source={{ uri: this.props.src }}
+                        indicator={Circle}
                         style={this.state.style}
-                        resizeMode="contain"
-                        onProgress={this.onProgress}
-                        onError={this.onError}
-                        onLoad={this.onLoad}
-                    >
-                        <Circle
-                            progress={this.state.progress}
-                            size={100}
-                            style={[
-                                style.progress,
-                                { display: this.state.status === LoadStatus.LOADED ? 'none' : 'flex' },
-                            ]}
-                        />
-                    </Image>
+                    />
+                    {
+                        // <Image
+                        //    source={{ uri: this.props.src, cache: 'force-cache' }}
+                        //    style={this.state.style}
+                        //    resizeMode="contain"
+                        //    onProgress={this.onProgress}
+                        //    onError={this.onError}
+                        //    onLoad={this.onLoad}
+                        // >
+                        //    <Circle
+                        //        progress={this.state.progress}
+                        //        size={100}
+                        //        style={[
+                        //            style.progress,
+                        //            { display: this.state.status === LoadStatus.LOADED ? 'none' : 'flex' },
+                        //        ]}
+                        //    />
+                        // </Image>
+                    }
                 </TouchableWithoutFeedback>
             </View>
         );
     }
-    private onProgress = (event: { nativeEvent: { loaded: number, total: number }}) => {
-        const { loaded, total } = event.nativeEvent;
-        this.setState({
-            progress: loaded / total,
-        });
-    }
-    private onError = () => {
-        this.props.swtichImageStatus(
-            this.props.cellIndex,
-            this.props.imageIndex,
-            'REJECT',
-        );
-        this.setState({ status: LoadStatus.FAILED });
-    }
-    private onLoad = () => {
-        this.props.swtichImageStatus(
-            this.props.cellIndex,
-            this.props.imageIndex,
-            'RESOLVE',
-        );
-        this.setState({ status: LoadStatus.LOADED });
-    }
+    // private onProgress = (event: { nativeEvent: { loaded: number, total: number }}) => {
+    //     const { loaded, total } = event.nativeEvent;
+    //     this.setState({
+    //         progress: loaded / total,
+    //     });
+    // }
+    // private onError = () => {
+    //     this.props.swtichImageStatus(
+    //         this.props.cellIndex,
+    //         this.props.imageIndex,
+    //         'REJECT',
+    //     );
+    //     this.setState({ status: LoadStatus.FAILED });
+    // }
+    // private onLoad = () => {
+    //     this.props.swtichImageStatus(
+    //         this.props.cellIndex,
+    //         this.props.imageIndex,
+    //         'RESOLVE',
+    //     );
+    //     this.setState({ status: LoadStatus.LOADED });
+    // }
     private handlePress = () => {
         const status = this.state.status;
         if (status !== LoadStatus.LOADED) {
