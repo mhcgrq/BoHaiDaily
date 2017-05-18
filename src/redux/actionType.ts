@@ -13,3 +13,5 @@ export const SWITCH_IMAGE_STATUS = 'SWITCH_IMAGE_STATUS';
 
 export const NAV_OPEN_FEED = 'NAV_OPEN_FEED';
 export const NAV_BACK = 'NAV_BACK';
+
+export const FEED_HAS_UPDATED = 'FEED_HAS_UPDATED';

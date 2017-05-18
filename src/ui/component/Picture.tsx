@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import {
-    View,
+    Animated,
     Dimensions,
     TouchableWithoutFeedback,
     StyleSheet,
@@ -26,24 +26,22 @@ export enum LoadStatus {
 interface State {
     randomKey: number;
     progress: number;
+    fadeAnim: Animated.Value,
     status: LoadStatus;
     style: {
         width: string | number;
         height: number;
-        // aspectRatio: number;
-        // maxHeight: number;
     };
 }
 
 const initState: State = {
     randomKey: Math.random(),
     progress: 0,
+    fadeAnim: new Animated.Value(0),
     status: LoadStatus.LOADING,
     style: {
         width: WINDOW_WIDTH,
         height: WINDOW_WIDTH,
-        // aspectRatio: 1,
-        // maxHeight: WINDOW_HEIGHT - 90,
     },
 };
 
@@ -52,36 +50,30 @@ export default class Picture extends PureComponent<Props, State> {
         src: '',
         title: '',
     };
-    // private static placeholder = require('../../../assets/placeholder.png');
     public state = initState;
     public componentDidMount() {
-        setTimeout(() => {
-            console.log(ImageCache.get());
-        }, 10000);
-        // Image.prefetch(this.props.src);
-        // Image.getSize(
-        //     this.props.src,
-        //     (width: number, height: number) => {
-        //         this.setState({
-        //             style: {
-        //                 width: '100%',
-        //                 aspectRatio: width / height,
-        //                 maxHeight: WINDOW_HEIGHT - 90,
-        //             },
-        //         });
-        //     },
-        //     () => {},
-        // );
+        Animated.timing(
+            this.state.fadeAnim,
+            { toValue: 1, useNativeDriver: true, }
+        ).start();  
     }
+    public componentWillUnmount() {
+        ImageCache.get().cancel(this.props.src);
+    }
+    
     public render() {
         return (
-            <View style={style.view} key={this.state.randomKey}>
+            <Animated.View style={[style.view, { opacity: this.state.fadeAnim, }]} key={this.state.randomKey}>
                 <TouchableWithoutFeedback onPress={this.handlePress}>
                     <CustomCachedImage
                         component={Image}
-                        source={{ uri: this.props.src }}
+                        source={{ uri: this.props.src, onProgress: this.onProgress }}
                         indicator={Circle}
+                        indicatorProps={{ progress: this.state.progress }}
                         style={this.state.style}
+                        //onProgress={this.onProgress}
+                        onError={this.onError}
+                        onLoad={this.onLoad}
                     />
                     {
                         // <Image
@@ -103,31 +95,30 @@ export default class Picture extends PureComponent<Props, State> {
                         // </Image>
                     }
                 </TouchableWithoutFeedback>
-            </View>
+            </Animated.View>
         );
     }
-    // private onProgress = (event: { nativeEvent: { loaded: number, total: number }}) => {
-    //     const { loaded, total } = event.nativeEvent;
-    //     this.setState({
-    //         progress: loaded / total,
-    //     });
-    // }
-    // private onError = () => {
-    //     this.props.swtichImageStatus(
-    //         this.props.cellIndex,
-    //         this.props.imageIndex,
-    //         'REJECT',
-    //     );
-    //     this.setState({ status: LoadStatus.FAILED });
-    // }
-    // private onLoad = () => {
-    //     this.props.swtichImageStatus(
-    //         this.props.cellIndex,
-    //         this.props.imageIndex,
-    //         'RESOLVE',
-    //     );
-    //     this.setState({ status: LoadStatus.LOADED });
-    // }
+    private onProgress = (loaded: number, total: number) => {
+        this.setState({
+            progress: loaded / total,
+        });
+    }
+    private onError = () => {
+        this.props.swtichImageStatus(
+            this.props.cellIndex,
+            this.props.imageIndex,
+            'REJECT',
+        );
+        this.setState({ status: LoadStatus.FAILED });
+    }
+    private onLoad = () => {
+        this.props.swtichImageStatus(
+            this.props.cellIndex,
+            this.props.imageIndex,
+            'RESOLVE',
+        );
+        this.setState({ status: LoadStatus.LOADED });
+    }
     private handlePress = () => {
         const status = this.state.status;
         if (status !== LoadStatus.LOADED) {

@@ -4,7 +4,7 @@ import { composeWithDevTools } from 'remote-redux-devtools';
 import createReducer from './rootReducer';
 import Saga from './rootSaga';
 import watcher from '../saga/watcher';
-import { throttleRequestFeedNextPage } from '../saga/saga';
+// import { throttleRequestFeedNextPage } from '../saga/saga';
 
 const sagaMiddleware = createSagaMiddleware();
 const middlewares: Middleware[] = [sagaMiddleware];
@@ -21,6 +21,6 @@ sagaMiddleware.run(saga.rootSaga.bind(saga), store);
 
 saga.injectAsyncSaga.call(saga, watcher);
 
-sagaMiddleware.run(throttleRequestFeedNextPage);
+// sagaMiddleware.run(throttleRequestFeedNextPage);
 
 export default store;

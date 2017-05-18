@@ -12,5 +12,6 @@ export default fromJS({
         data: [],
         visibleData: [],
         page: 1,
+        hasUpdated: false,
     },
 });

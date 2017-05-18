@@ -28,7 +28,7 @@ export function* getFeed({ href }: { href: string }) {
     }
 }
 
-function* requestFeedNextPage() {
+export function* requestFeedNextPage() {
     yield put({ type: types.FEED_NEXT_PAGE });
 }
 

@@ -29,4 +29,7 @@ export function swtichImageStatus(cellIndex, imageIndex, status) {
         payload: { cellIndex, imageIndex, status },
     };
 }
+export function hasUpdatedFeed() {
+    return { type: types.FEED_HAS_UPDATED };
+}
 //# sourceMappingURL=action.js.map

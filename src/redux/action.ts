@@ -35,3 +35,7 @@ export function swtichImageStatus(cellIndex: number, imageIndex: number, status:
         payload: { cellIndex, imageIndex, status },
     };
 }
+
+export function hasUpdatedFeed() {
+    return { type: types.FEED_HAS_UPDATED };
+}

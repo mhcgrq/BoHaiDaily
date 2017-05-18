@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Dimensions, TouchableWithoutFeedback, StyleSheet, } from 'react-native';
+import { Animated, Dimensions, TouchableWithoutFeedback, StyleSheet, } from 'react-native';
 import { CustomCachedImage, ImageCache } from 'react-native-img-cache';
 import Image from 'react-native-image-progress';
 import { Circle } from 'react-native-progress';
@@ -13,6 +13,7 @@ export var LoadStatus;
 const initState = {
     randomKey: Math.random(),
     progress: 0,
+    fadeAnim: new Animated.Value(0),
     status: LoadStatus.LOADING,
     style: {
         width: WINDOW_WIDTH,
@@ -22,30 +23,20 @@ const initState = {
 export default class Picture extends PureComponent {
     constructor() {
         super(...arguments);
-        // private static placeholder = require('../../../assets/placeholder.png');
         this.state = initState;
-        // private onProgress = (event: { nativeEvent: { loaded: number, total: number }}) => {
-        //     const { loaded, total } = event.nativeEvent;
-        //     this.setState({
-        //         progress: loaded / total,
-        //     });
-        // }
-        // private onError = () => {
-        //     this.props.swtichImageStatus(
-        //         this.props.cellIndex,
-        //         this.props.imageIndex,
-        //         'REJECT',
-        //     );
-        //     this.setState({ status: LoadStatus.FAILED });
-        // }
-        // private onLoad = () => {
-        //     this.props.swtichImageStatus(
-        //         this.props.cellIndex,
-        //         this.props.imageIndex,
-        //         'RESOLVE',
-        //     );
-        //     this.setState({ status: LoadStatus.LOADED });
-        // }
+        this.onProgress = (loaded, total) => {
+            this.setState({
+                progress: loaded / total,
+            });
+        };
+        this.onError = () => {
+            this.props.swtichImageStatus(this.props.cellIndex, this.props.imageIndex, 'REJECT');
+            this.setState({ status: LoadStatus.FAILED });
+        };
+        this.onLoad = () => {
+            this.props.swtichImageStatus(this.props.cellIndex, this.props.imageIndex, 'RESOLVE');
+            this.setState({ status: LoadStatus.LOADED });
+        };
         this.handlePress = () => {
             const status = this.state.status;
             if (status !== LoadStatus.LOADED) {
@@ -54,31 +45,20 @@ export default class Picture extends PureComponent {
         };
     }
     componentDidMount() {
-        setTimeout(() => {
-            console.log(ImageCache.get());
-        }, 10000);
-        // Image.prefetch(this.props.src);
-        // Image.getSize(
-        //     this.props.src,
-        //     (width: number, height: number) => {
-        //         this.setState({
-        //             style: {
-        //                 width: '100%',
-        //                 aspectRatio: width / height,
-        //                 maxHeight: WINDOW_HEIGHT - 90,
-        //             },
-        //         });
-        //     },
-        //     () => {},
-        // );
+        Animated.timing(this.state.fadeAnim, { toValue: 1, useNativeDriver: true, }).start();
+    }
+    componentWillUnmount() {
+        ImageCache.get().cancel(this.props.src);
     }
     render() {
-        return (<View style={style.view} key={this.state.randomKey}>
+        return (<Animated.View style={[style.view, { opacity: this.state.fadeAnim, }]} key={this.state.randomKey}>
                 <TouchableWithoutFeedback onPress={this.handlePress}>
-                    <CustomCachedImage component={Image} source={{ uri: this.props.src }} indicator={Circle} style={this.state.style}/>
+                    <CustomCachedImage component={Image} source={{ uri: this.props.src, onProgress: this.onProgress }} indicator={Circle} indicatorProps={{ progress: this.state.progress }} style={this.state.style} 
+        //onProgress={this.onProgress}
+        onError={this.onError} onLoad={this.onLoad}/>
                     
                 </TouchableWithoutFeedback>
-            </View>);
+            </Animated.View>);
     }
 }
 Picture.defaultProps = {

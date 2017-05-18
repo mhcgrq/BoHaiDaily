@@ -66,11 +66,15 @@ export default function(state = initStore, { type, payload }: { type: string, pa
             const currentPage = state.getIn(['feed', 'page']);
             const data = state.getIn(['feed', 'data']);
             let currentVisibleData = state.getIn(['feed', 'visibleData']);
-            const isAllResolved = currentVisibleData.every((item: any) => {
-                return item.get('src')
-                    .every((s: any) => s.get('status') === 'RESOLVE');
-            });
-            if (!isAllResolved) {
+            // const isAllResolved = currentVisibleData.every((item: any) => {
+            //     return item.get('src')
+            //         .every((s: any) => s.get('status') === 'RESOLVE');
+            // });
+            // if (!isAllResolved) {
+            //     return state;
+            // }
+            const hasUpdated = state.getIn(['feed', 'hasUpdated']);
+            if (!hasUpdated) {
                 return state;
             }
             const newData = data.slice(currentPage * OFFSET, (currentPage + 1) * OFFSET);
@@ -78,9 +82,13 @@ export default function(state = initStore, { type, payload }: { type: string, pa
                 currentVisibleData = currentVisibleData.concat(newData);
                 return state
                     .setIn(['feed', 'page'], currentPage + 1)
-                    .setIn(['feed', 'visibleData'], currentVisibleData);
+                    .setIn(['feed', 'visibleData'], currentVisibleData)
+                    .setIn(['feed', 'hasUpdated'], false);
             }
             return state;
+        }
+        case types.FEED_HAS_UPDATED: {
+            return state.setIn(['feed', 'hasUpdated'], true);
         }
         case types.SWITCH_IMAGE_STATUS: {
             const { cellIndex, imageIndex, status } = payload;

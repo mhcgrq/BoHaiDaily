@@ -27,7 +27,7 @@ export function* getFeed({ href }) {
         yield put({ type: types.REJECT_FEED });
     }
 }
-function* requestFeedNextPage() {
+export function* requestFeedNextPage() {
     yield put({ type: types.FEED_NEXT_PAGE });
 }
 export function* throttleRequestFeedNextPage() {

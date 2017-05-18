@@ -10,6 +10,10 @@ const watcher = [
         type: types.REQUEST_FEED,
         saga: saga.getFeed,
     },
+    {
+        type: types.FEED_NEXT_PAGE_SAGA,
+        saga: saga.requestFeedNextPage,
+    }
 ];
 
 export default watcher;

@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
-import { FlatList, } from 'react-native';
+import { Animated, FlatList, ActivityIndicator, InteractionManager, } from 'react-native';
 import { connect } from 'react-redux';
+import { ImageCache } from 'react-native-img-cache';
 import FeedCell from '../component/FeedCell';
-import { getFeed, requestFeedNextPage, swtichImageStatus } from '../../redux/action';
+import { getFeed, requestFeedNextPage, swtichImageStatus, hasUpdatedFeed } from '../../redux/action';
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 class Feed extends PureComponent {
     constructor() {
         super(...arguments);
@@ -14,31 +16,53 @@ class Feed extends PureComponent {
         };
         this.onEndReached = () => {
             if (this.props.data.size < this.props.totalLength) {
-                this.props.dispatch(requestFeedNextPage());
+                this.setState({ refreshing: true });
+                this.runAfterInteractions(() => {
+                    this.props.dispatch(requestFeedNextPage());
+                });
             }
         };
         this.swtichImageStatus = (cellIndex, imageIndex, status) => {
-            this.props.dispatch(swtichImageStatus(cellIndex, imageIndex, status));
+            this.runAfterInteractions(() => {
+                this.props.dispatch(swtichImageStatus(cellIndex, imageIndex, status));
+            });
         };
-        // private onViewableItemsChanged = (info: {viewableItems: ViewToken[], changed: ViewToken[]}) => {
-        //     console.log('info: ', info);
-        // }
+        this.onViewableItemsChanged = (info) => {
+            this.runAfterInteractions(() => {
+                console.log('info: ', info);
+                const cache = ImageCache.get();
+                console.log('cache: ', cache);
+                info.changed.forEach((item) => {
+                    if (!item.isViewable) {
+                        item.item.src.forEach((s) => {
+                            cache.cancel(s);
+                        });
+                    }
+                });
+            });
+        };
+        this.runAfterInteractions = (task) => {
+            InteractionManager.runAfterInteractions(task);
+        };
+        this.ListFooterComponent = () => (<ActivityIndicator animating={this.state.refreshing}/>);
     }
     componentDidMount() {
-        this.props.dispatch(getFeed(this.props.navigation.state.params.href));
+        this.runAfterInteractions(() => this.props.dispatch(getFeed(this.props.navigation.state.params.href)));
+    }
+    componentWillReceiveProps(nextProps) {
+        if (this.props.data.size !== nextProps.data.size) {
+            this.setState({ refreshing: false });
+        }
+    }
+    componentDidUpdate(prevProps) {
+        this.runAfterInteractions(() => {
+            if (this.props.data.size !== prevProps.data.size) {
+                this.props.dispatch(hasUpdatedFeed());
+            }
+        });
     }
     render() {
-        return (<FlatList data={this.props.data.toJS().filter((item, index) => {
-            if (index === 0) {
-                return true;
-            }
-            if (index !== 0 && item.src.length === 1) {
-                return false;
-            }
-            return true;
-        })} renderItem={this.renderItem} 
-        // onViewableItemsChanged={this.onViewableItemsChanged}
-        keyExtractor={(item) => item.title} onEndReached={this.onEndReached} onEndReachedThreshold={0}/>);
+        return (<AnimatedFlatList data={this.props.data.toJS()} renderItem={this.renderItem} onViewableItemsChanged={this.onViewableItemsChanged} keyExtractor={(item) => item.title} onEndReached={this.onEndReached} onEndReachedThreshold={0} ListFooterComponent={this.ListFooterComponent}/>);
     }
 }
 const mapPropsToState = (state) => ({
