@@ -51,14 +51,17 @@ export default class Picture extends PureComponent<Props, State> {
         title: '',
     };
     public state = initState;
+    private mounted = false;
     public componentDidMount() {
         Animated.timing(
             this.state.fadeAnim,
             { toValue: 1, useNativeDriver: true, }
-        ).start();  
+        ).start();
+        this.mounted = true;
     }
     public componentWillUnmount() {
         ImageCache.get().cancel(this.props.src);
+        this.mounted = false;
     }
     
     public render() {
@@ -99,9 +102,11 @@ export default class Picture extends PureComponent<Props, State> {
         );
     }
     private onProgress = (loaded: number, total: number) => {
-        this.setState({
-            progress: loaded / total,
-        });
+        if (this.mounted) {
+            this.setState({
+                progress: loaded / total,
+            });
+        }
     }
     private onError = () => {
         this.props.swtichImageStatus(

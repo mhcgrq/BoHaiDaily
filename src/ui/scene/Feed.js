@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Animated, FlatList, ActivityIndicator, InteractionManager, } from 'react-native';
+import { Animated, View, FlatList, StyleSheet, ActivityIndicator, InteractionManager, } from 'react-native';
 import { connect } from 'react-redux';
 import { ImageCache } from 'react-native-img-cache';
 import FeedCell from '../component/FeedCell';
@@ -30,12 +30,11 @@ class Feed extends PureComponent {
         this.onViewableItemsChanged = (info) => {
             this.runAfterInteractions(() => {
                 console.log('info: ', info);
-                const cache = ImageCache.get();
-                console.log('cache: ', cache);
                 info.changed.forEach((item) => {
                     if (!item.isViewable) {
                         item.item.src.forEach((s) => {
-                            cache.cancel(s);
+                            console.log(item.item.title);
+                            ImageCache.get().cancel(s);
                         });
                     }
                 });
@@ -45,6 +44,7 @@ class Feed extends PureComponent {
             InteractionManager.runAfterInteractions(task);
         };
         this.ListFooterComponent = () => (<ActivityIndicator animating={this.state.refreshing}/>);
+        this.ItemSeparatorComponent = () => (<View style={style.separator}/>);
     }
     componentDidMount() {
         this.runAfterInteractions(() => this.props.dispatch(getFeed(this.props.navigation.state.params.href)));
@@ -62,13 +62,26 @@ class Feed extends PureComponent {
         });
     }
     render() {
-        return (<AnimatedFlatList data={this.props.data.toJS()} renderItem={this.renderItem} onViewableItemsChanged={this.onViewableItemsChanged} keyExtractor={(item) => item.title} onEndReached={this.onEndReached} onEndReachedThreshold={0} ListFooterComponent={this.ListFooterComponent}/>);
+        return (<AnimatedFlatList style={style.view} data={this.props.data.toJS()} renderItem={this.renderItem} onViewableItemsChanged={this.onViewableItemsChanged} keyExtractor={(item) => item.title} onEndReached={this.onEndReached} onEndReachedThreshold={0} ListFooterComponent={this.ListFooterComponent} ItemSeparatorComponent={this.ItemSeparatorComponent}/>);
     }
 }
 const mapPropsToState = (state) => ({
     status: state.getIn(['root', 'feed', 'status']),
     data: state.getIn(['root', 'feed', 'visibleData']),
     totalLength: state.getIn(['root', 'feed', 'data']).size,
+});
+const style = StyleSheet.create({
+    view: {
+        paddingLeft: 20,
+        paddingRight: 20,
+    },
+    separator: {
+        width: '100%',
+        height: 1,
+        marginTop: 10,
+        marginBottom: 10,
+        backgroundColor: '#ddd',
+    },
 });
 export default connect(mapPropsToState)(Feed);
 //# sourceMappingURL=Feed.js.map

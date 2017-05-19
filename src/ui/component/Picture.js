@@ -24,10 +24,13 @@ export default class Picture extends PureComponent {
     constructor() {
         super(...arguments);
         this.state = initState;
+        this.mounted = false;
         this.onProgress = (loaded, total) => {
-            this.setState({
-                progress: loaded / total,
-            });
+            if (this.mounted) {
+                this.setState({
+                    progress: loaded / total,
+                });
+            }
         };
         this.onError = () => {
             this.props.swtichImageStatus(this.props.cellIndex, this.props.imageIndex, 'REJECT');
@@ -46,9 +49,11 @@ export default class Picture extends PureComponent {
     }
     componentDidMount() {
         Animated.timing(this.state.fadeAnim, { toValue: 1, useNativeDriver: true, }).start();
+        this.mounted = true;
     }
     componentWillUnmount() {
         ImageCache.get().cancel(this.props.src);
+        this.mounted = false;
     }
     render() {
         return (<Animated.View style={[style.view, { opacity: this.state.fadeAnim, }]} key={this.state.randomKey}>

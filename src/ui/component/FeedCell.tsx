@@ -1,12 +1,12 @@
 import React from 'react';
 import {
     View,
-    Text,
     StyleSheet,
     Dimensions,
 } from 'react-native';
 import Picture from './Picture';
 import ImageView from './ImageView';
+import FeedTitle from './FeedTitle';
 import { FeedItem } from '../../redux/reducer';
 
 interface Props extends FeedItem {
@@ -15,30 +15,25 @@ interface Props extends FeedItem {
 }
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
-const TITLE_HEIGHT = 50;
-const PADDING = 20;
-const MARGIN = 20;
-export const CELL_HEIGHT = TITLE_HEIGHT + WINDOW_WIDTH + MARGIN * 2 + PADDING * 2;
 
 const style = StyleSheet.create({
     view: {
         flex: 1,
         justifyContent: 'center',
-        width: WINDOW_WIDTH,
+        width: WINDOW_WIDTH - 40,
         backgroundColor: '#fff',
     },
-    title: {
-        fontSize: 16,
+    imageView: {
+        width: WINDOW_WIDTH - 40,
+        height: WINDOW_WIDTH * 9 / 16,
     },
 });
 
 export default function FeedCell(props: Props) {
     return (
         <View style={style.view}>
-            <Text style={style.title}>{props.title}</Text>
-            <ImageView
-                style={{ height: WINDOW_WIDTH }}
-            >
+            <FeedTitle title={props.title} index={props.cellIndex} />
+            <ImageView style={style.imageView}>
                 {
                     props.src.map((s, index) => (
                         <Picture

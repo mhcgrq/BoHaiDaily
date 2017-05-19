@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
 import {
     Animated,
+    View,
     FlatList,
+    StyleSheet,
     ActivityIndicator,
     ViewToken,
     InteractionManager,
@@ -55,13 +57,15 @@ class Feed extends PureComponent<Props, State> {
     public render() {
         return (
             <AnimatedFlatList
+                style={style.view}
                 data={this.props.data.toJS()}
                 renderItem={this.renderItem}
                 onViewableItemsChanged={this.onViewableItemsChanged}
                 keyExtractor={(item: FeedItem) => item.title}
                 onEndReached={this.onEndReached}
                 onEndReachedThreshold={0}
-                ListFooterComponent={this.ListFooterComponent as any}
+                ListFooterComponent={this.ListFooterComponent}
+                ItemSeparatorComponent={this.ItemSeparatorComponent}
             />
         );
     }
@@ -90,22 +94,24 @@ class Feed extends PureComponent<Props, State> {
     private onViewableItemsChanged = (info: {viewableItems: ViewToken[], changed: ViewToken[]}) => {
         this.runAfterInteractions(() => {
             console.log('info: ', info);
-            const cache = ImageCache.get();
-            console.log('cache: ', cache);
             info.changed.forEach((item) => {
                 if (!item.isViewable) {
                     item.item.src.forEach((s: string) => {
-                        cache.cancel(s);
+                        console.log(item.item.title);
+                        ImageCache.get().cancel(s);
                     });
                 }
             });
-        })
+        });
     }
     private runAfterInteractions = (task: () => void) => {
         InteractionManager.runAfterInteractions(task);
     }
     private ListFooterComponent = () => (
         <ActivityIndicator animating={this.state.refreshing} />
+    )
+    private ItemSeparatorComponent = () => (
+        <View style={style.separator} />
     )
 }
 
@@ -114,5 +120,19 @@ const mapPropsToState = (state: any) => ({
     data: state.getIn(['root', 'feed', 'visibleData']),
     totalLength: state.getIn(['root', 'feed', 'data']).size,
 });
+
+const style = StyleSheet.create({
+    view: {
+        paddingLeft: 20,
+        paddingRight: 20,
+    },
+    separator: {
+        width: '100%',
+        height: 1,
+        marginTop: 10,
+        marginBottom: 10,
+        backgroundColor: '#ddd',
+    },
+})
 
 export default connect(mapPropsToState)(Feed);

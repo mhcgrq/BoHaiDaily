@@ -35,7 +35,7 @@ export default function (state = initStore, { type, payload }) {
                 const pText = $(p).text();
                 const isTitle = /^【\d+】/.test(pText);
                 if (isTitle) {
-                    const feed = { title: pText, src: [] };
+                    const feed = { title: pText.replace(/^【\d+】/, ''), src: [] };
                     let nextP = $(p).next();
                     while ($(nextP).children().is('img')) {
                         const src = $(nextP).children('img').attr('src');
