@@ -64,9 +64,11 @@ export default class ImageView extends PureComponent {
     render() {
         const { contentContainerStyle, style, maximumZoomScale, minimumZoomScale, scrollOffset, children, } = this.props;
         const childrenCount = React.Children.count(children);
-        return (<View>
+        return (<View style={{ flex: 1 }}>
                 <ScrollView contentContainerStyle={contentContainerStyle} style={style} horizontal pagingEnabled contentOffset={scrollOffset} scrollEnabled={childrenCount > 1} showsHorizontalScrollIndicator={false} onMomentumScrollEnd={this.updateCurrentIndex} scrollEventThrottle={16} onTouchStart={this.handleStartTouch} onTouchEnd={this.handleEndTouch}>
-                    {React.Children.map(children, this.mapChildren)}
+                    <View style={{ flex: 1 }}>
+                        {React.Children.map(children, this.mapChildren)}
+                    </View>
                 </ScrollView>
                 {this.props.isPreview &&
             <Modal visible={this.state.modalVisible} animationType="fade" supportedOrientations={['portrait']}>

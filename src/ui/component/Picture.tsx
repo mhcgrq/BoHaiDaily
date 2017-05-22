@@ -4,12 +4,14 @@ import {
     Dimensions,
     TouchableWithoutFeedback,
     StyleSheet,
+    Image as OriImage,
 } from 'react-native';
 import { CustomCachedImage, ImageCache } from 'react-native-img-cache';
 import Image from 'react-native-image-progress';
 import { Circle } from 'react-native-progress';
+import { PADDING, HEADER_HEIGHT } from '../../constants/constants';
 
-const { width: WINDOW_WIDTH } = Dimensions.get('window');
+const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = Dimensions.get('window');
 
 interface Props {
     src: string;
@@ -26,12 +28,9 @@ export enum LoadStatus {
 interface State {
     randomKey: number;
     progress: number;
-    fadeAnim: Animated.Value,
+    fadeAnim: Animated.Value;
     status: LoadStatus;
-    style: {
-        width: string | number;
-        height: number;
-    };
+    aspectRatio: number;
 }
 
 const initState: State = {
@@ -39,10 +38,7 @@ const initState: State = {
     progress: 0,
     fadeAnim: new Animated.Value(0),
     status: LoadStatus.LOADING,
-    style: {
-        width: WINDOW_WIDTH,
-        height: WINDOW_WIDTH,
-    },
+    aspectRatio: 1,
 };
 
 export default class Picture extends PureComponent<Props, State> {
@@ -55,7 +51,7 @@ export default class Picture extends PureComponent<Props, State> {
     public componentDidMount() {
         Animated.timing(
             this.state.fadeAnim,
-            { toValue: 1, useNativeDriver: true, }
+            { toValue: 1, useNativeDriver: true },
         ).start();
         this.mounted = true;
     }
@@ -63,18 +59,19 @@ export default class Picture extends PureComponent<Props, State> {
         ImageCache.get().cancel(this.props.src);
         this.mounted = false;
     }
-    
+
     public render() {
         return (
-            <Animated.View style={[style.view, { opacity: this.state.fadeAnim, }]} key={this.state.randomKey}>
+            <Animated.View style={[style.view, { opacity: this.state.fadeAnim }]} key={this.state.randomKey}>
                 <TouchableWithoutFeedback onPress={this.handlePress}>
                     <CustomCachedImage
                         component={Image}
                         source={{ uri: this.props.src, onProgress: this.onProgress }}
                         indicator={Circle}
                         indicatorProps={{ progress: this.state.progress }}
-                        style={this.state.style}
-                        //onProgress={this.onProgress}
+                        style={[style.image, { height: WINDOW_WIDTH / this.state.aspectRatio }]}
+                        resizeMode="contain"
+                        // onProgress={this.onProgress}
                         onError={this.onError}
                         onLoad={this.onLoad}
                     />
@@ -122,6 +119,15 @@ export default class Picture extends PureComponent<Props, State> {
             this.props.imageIndex,
             'RESOLVE',
         );
+        OriImage.getSize(
+            this.props.src,
+            (width: number, height: number) => {
+                this.setState({
+                    aspectRatio: width / height,
+                });
+            },
+            () => {},
+        );
         this.setState({ status: LoadStatus.LOADED });
     }
     private handlePress = () => {
@@ -136,6 +142,10 @@ const style = StyleSheet.create({
     view: {
         flex: 1,
         alignItems: 'center',
+    },
+    image: {
+        width: WINDOW_WIDTH - PADDING * 2,
+        maxHeight: WINDOW_HEIGHT - HEADER_HEIGHT,
     },
     progress: {
         flex: 1,

@@ -3,8 +3,9 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"start": "concurrently 'tsc -w' 'node node_modules/react-native/local-cli/cli.js start -- reset-cache' 'node ./remotedev-server.js'",
+		"start": "concurrently 'tsc -w' 'react-native run-ios -- reset-cache' 'node ./remotedev-server.js'",
 		"test": "jest",
+		"server": "concurrently 'tsc -w' 'node node_modules/react-native/local-cli/cli.js start -- reset-cache' 'node ./remotedev-server.js'",
 		"clear": "watchman watch-del-all && rm -fr $TMPDIR/react-*"
 	},
 	"dependencies": {

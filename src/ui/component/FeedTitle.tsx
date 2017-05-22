@@ -52,6 +52,6 @@ const style = StyleSheet.create({
         height: '100%',
         alignItems: 'center',
     },
-})
+});
 
 export default FeedTitle;

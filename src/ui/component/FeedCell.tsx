@@ -8,6 +8,7 @@ import Picture from './Picture';
 import ImageView from './ImageView';
 import FeedTitle from './FeedTitle';
 import { FeedItem } from '../../redux/reducer';
+import { PADDING } from '../../constants/constants';
 
 interface Props extends FeedItem {
     cellIndex: number;
@@ -20,12 +21,12 @@ const style = StyleSheet.create({
     view: {
         flex: 1,
         justifyContent: 'center',
-        width: WINDOW_WIDTH - 40,
+        width: WINDOW_WIDTH - PADDING * 2,
         backgroundColor: '#fff',
     },
     imageView: {
-        width: WINDOW_WIDTH - 40,
-        height: WINDOW_WIDTH * 9 / 16,
+        flex: 1,
+        width: WINDOW_WIDTH - PADDING * 2,
     },
 });
 

@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react';
-import { Animated, Dimensions, TouchableWithoutFeedback, StyleSheet, } from 'react-native';
+import { Animated, Dimensions, TouchableWithoutFeedback, StyleSheet, Image as OriImage, } from 'react-native';
 import { CustomCachedImage, ImageCache } from 'react-native-img-cache';
 import Image from 'react-native-image-progress';
 import { Circle } from 'react-native-progress';
-const { width: WINDOW_WIDTH } = Dimensions.get('window');
+import { PADDING, HEADER_HEIGHT } from '../../constants/constants';
+const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = Dimensions.get('window');
 export var LoadStatus;
 (function (LoadStatus) {
     LoadStatus[LoadStatus["LOADING"] = 0] = "LOADING";
@@ -15,10 +16,7 @@ const initState = {
     progress: 0,
     fadeAnim: new Animated.Value(0),
     status: LoadStatus.LOADING,
-    style: {
-        width: WINDOW_WIDTH,
-        height: WINDOW_WIDTH,
-    },
+    aspectRatio: 1,
 };
 export default class Picture extends PureComponent {
     constructor() {
@@ -38,6 +36,11 @@ export default class Picture extends PureComponent {
         };
         this.onLoad = () => {
             this.props.swtichImageStatus(this.props.cellIndex, this.props.imageIndex, 'RESOLVE');
+            OriImage.getSize(this.props.src, (width, height) => {
+                this.setState({
+                    aspectRatio: width / height,
+                });
+            }, () => { });
             this.setState({ status: LoadStatus.LOADED });
         };
         this.handlePress = () => {
@@ -48,7 +51,7 @@ export default class Picture extends PureComponent {
         };
     }
     componentDidMount() {
-        Animated.timing(this.state.fadeAnim, { toValue: 1, useNativeDriver: true, }).start();
+        Animated.timing(this.state.fadeAnim, { toValue: 1, useNativeDriver: true }).start();
         this.mounted = true;
     }
     componentWillUnmount() {
@@ -56,10 +59,10 @@ export default class Picture extends PureComponent {
         this.mounted = false;
     }
     render() {
-        return (<Animated.View style={[style.view, { opacity: this.state.fadeAnim, }]} key={this.state.randomKey}>
+        return (<Animated.View style={[style.view, { opacity: this.state.fadeAnim }]} key={this.state.randomKey}>
                 <TouchableWithoutFeedback onPress={this.handlePress}>
-                    <CustomCachedImage component={Image} source={{ uri: this.props.src, onProgress: this.onProgress }} indicator={Circle} indicatorProps={{ progress: this.state.progress }} style={this.state.style} 
-        //onProgress={this.onProgress}
+                    <CustomCachedImage component={Image} source={{ uri: this.props.src, onProgress: this.onProgress }} indicator={Circle} indicatorProps={{ progress: this.state.progress }} style={[style.image, { height: WINDOW_WIDTH / this.state.aspectRatio }]} resizeMode="contain" 
+        // onProgress={this.onProgress}
         onError={this.onError} onLoad={this.onLoad}/>
                     
                 </TouchableWithoutFeedback>
@@ -74,6 +77,10 @@ const style = StyleSheet.create({
     view: {
         flex: 1,
         alignItems: 'center',
+    },
+    image: {
+        width: WINDOW_WIDTH - PADDING * 2,
+        maxHeight: WINDOW_HEIGHT - HEADER_HEIGHT,
     },
     progress: {
         flex: 1,

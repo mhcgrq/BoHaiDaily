@@ -59,7 +59,7 @@ export default class ImageView extends PureComponent<Props, State> {
         } = this.props;
         const childrenCount = React.Children.count(children);
         return (
-            <View>
+            <View style={{ flex: 1 }}>
                 <ScrollView
                     contentContainerStyle={contentContainerStyle}
                     style={style}
@@ -73,7 +73,9 @@ export default class ImageView extends PureComponent<Props, State> {
                     onTouchStart={this.handleStartTouch}
                     onTouchEnd={this.handleEndTouch}
                 >
-                    {React.Children.map(children, this.mapChildren)}
+                    <View style={{ flex: 1 }}>
+                        {React.Children.map(children, this.mapChildren)}
+                    </View>
                 </ScrollView>
                 {
                     this.props.isPreview &&
