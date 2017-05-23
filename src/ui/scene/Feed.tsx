@@ -12,10 +12,10 @@ import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
 import { Dispatch } from 'redux';
 import { NavigationNavigatorProps } from 'react-navigation';
-import { ImageCache } from 'react-native-img-cache';
 import FeedCell from '../component/FeedCell';
 import { getFeed, requestFeedNextPage, swtichImageStatus, hasUpdatedFeed } from '../../redux/action';
 import { FeedItem } from '../../redux/reducer';
+import ImageCache from '../../utils/img-cache';
 
 interface Props extends NavigationNavigatorProps<{ title: string; href: string; }> {
     status: string;
@@ -37,8 +37,8 @@ class Feed extends PureComponent<Props, State> {
     public componentDidMount() {
         this.runAfterInteractions(
             () => this.props.dispatch(
-                getFeed(this.props.navigation.state.params.href)
-            )
+                getFeed(this.props.navigation.state.params.href),
+            ),
         );
     }
     public componentWillReceiveProps(nextProps: Props) {
@@ -53,7 +53,7 @@ class Feed extends PureComponent<Props, State> {
             }
         });
     }
-    
+
     public render() {
         return (
             <AnimatedFlatList
@@ -133,6 +133,6 @@ const style = StyleSheet.create({
         marginBottom: 10,
         backgroundColor: '#ddd',
     },
-})
+});
 
 export default connect(mapPropsToState)(Feed);

@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import { Animated, View, FlatList, StyleSheet, ActivityIndicator, InteractionManager, } from 'react-native';
 import { connect } from 'react-redux';
-import { ImageCache } from 'react-native-img-cache';
 import FeedCell from '../component/FeedCell';
 import { getFeed, requestFeedNextPage, swtichImageStatus, hasUpdatedFeed } from '../../redux/action';
+import ImageCache from '../../utils/img-cache';
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 class Feed extends PureComponent {
     constructor() {

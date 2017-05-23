@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"start": "concurrently 'tsc -w' 'react-native run-ios -- reset-cache' 'node ./remotedev-server.js'",
+		"start": "concurrently 'tsc -w' 'node node_modules/react-native/local-cli/cli.js start -- reset-cache' 'react-native run-ios -- reset-cache' 'node ./remotedev-server.js'",
 		"test": "jest",
 		"server": "concurrently 'tsc -w' 'node node_modules/react-native/local-cli/cli.js start -- reset-cache' 'node ./remotedev-server.js'",
 		"clear": "watchman watch-del-all && rm -fr $TMPDIR/react-*"
@@ -15,13 +15,13 @@
 		"immutable": "^3.8.1",
 		"react": "16.0.0-alpha.6",
 		"react-native": "0.44.0",
+		"react-native-cached-image": "^1.3.3",
 		"react-native-fetch-blob": "^0.10.5",
 		"react-native-image-progress": "^0.6.0",
-		"react-native-img-cache": "^1.4.0",
 		"react-native-progress": "^3.2.1",
 		"react-native-stream": "^0.1.9",
 		"react-navigation": "^1.0.0-beta.9",
-		"react-redux": "^5.0.4",
+		"react-redux": "^5.0.5",
 		"redux": "^3.6.0",
 		"redux-immutable": "^4.0.0",
 		"redux-saga": "^0.15.3"
@@ -29,14 +29,14 @@
 	"devDependencies": {
 		"@types/cheerio": "^0.22.1",
 		"@types/react": "^15.0.24",
-		"@types/react-native": "^0.44.0",
+		"@types/react-native": "^0.44.3",
 		"@types/react-native-fetch-blob": "^0.10.1",
-		"@types/react-navigation": "^1.0.1",
+		"@types/react-navigation": "^1.0.2",
 		"@types/react-redux": "^4.4.40",
 		"@types/redux-immutable": "^3.0.33",
 		"@types/remote-redux-devtools": "^0.5.0",
-		"babel-jest": "20.0.1",
-		"babel-plugin-module-resolver": "^2.7.0",
+		"babel-jest": "20.0.3",
+		"babel-plugin-module-resolver": "^2.7.1",
 		"babel-plugin-syntax-trailing-function-commas": "^6.22.0",
 		"babel-plugin-transform-class-constructor-call": "^6.24.1",
 		"babel-plugin-transform-do-expressions": "^6.22.0",
@@ -46,11 +46,11 @@
 		"babel-preset-react-native": "1.9.2",
 		"babel-preset-stage-0": "^6.24.1",
 		"concurrently": "^3.4.0",
-		"jest": "20.0.1",
+		"jest": "20.0.3",
 		"react-test-renderer": "16.0.0-alpha.6",
-		"remote-redux-devtools": "^0.5.10",
+		"remote-redux-devtools": "^0.5.11",
 		"remotedev-server": "^0.2.2",
-		"typescript": "^2.3.2"
+		"typescript": "^2.3.3"
 	},
 	"jest": {
 		"preset": "react-native"

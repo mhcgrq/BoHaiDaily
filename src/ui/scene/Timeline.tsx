@@ -19,6 +19,7 @@ interface Props extends NavigationNavigatorProps<{}> {
 
 class TimeLine extends PureComponent<Props, {}> {
     public componentDidMount() {
+        console.log(this.props);
         this.props.dispatch(getTimeline(1));
     }
     public render() {

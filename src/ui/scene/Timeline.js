@@ -19,6 +19,7 @@ class TimeLine extends PureComponent {
         };
     }
     componentDidMount() {
+        console.log(this.props);
         this.props.dispatch(getTimeline(1));
     }
     render() {
